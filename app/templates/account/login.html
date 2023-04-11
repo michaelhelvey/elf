@@ -1,0 +1,27 @@
+{% extends './_partials/account_form_base.html' %}
+
+{% block page_title %}Log In{% endblock page_title %}
+
+{% block form_title %}Log In{% endblock form_title %}
+
+{% block form %}
+<form method="POST" action="{% url 'account_login' %}" class="grid grid-cols-1 gap-4 mt-8">
+	{% csrf_token %}
+
+	{{ form.as_div }}
+
+	{% if redirect_field_value %}
+		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+	{% endif %}
+
+	<button class="button" type="submit">Log In</button>
+	<div class="flex justify-between items-center w-full">
+		<a id="forgot-password-link" class="text-sm text-slate-600 hover:underline" href="{% url 'account_reset_password' %}">
+			Forgot Password?
+		</a>
+		<a id="create-account-link" class="text-sm text-slate-600 hover:underline" href="{% url 'account_signup' %}">
+			Create Account
+		</a>
+	</div>
+</form>
+{% endblock form %}

@@ -1,0 +1,39 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django = "==4.2b1"
+django-extensions = "*"
+whitenoise = "*"
+django-allauth = "*"
+werkzeug = "*"
+dj-database-url = "*"
+psycopg2 = "*"
+gunicorn = "*"
+factory-boy = "*"
+django-debug-toolbar = "*"
+django-anymail = "*"
+djangorestframework = "*"
+markdown = "*"
+django-filter = "*"
+daphne = "*"
+channels = "*"
+
+[dev-packages]
+black = "*"
+isort = "*"
+ipython = "*"
+ruff = "*"
+pytest = "*"
+pytest-env = "*"
+pytest-django = "*"
+pytest-cov = "*"
+beautifulsoup4 = "*"
+
+[requires]
+python_version = "3.11"
+
+[pipenv]
+allow_prereleases = true

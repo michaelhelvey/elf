@@ -1,0 +1,16 @@
+{% extends './_partials/account_form_base.html' %}
+
+{% block page_title %}Verify Your Email Address{% endblock page_title %}
+
+{% block form_title %}Verify Your Email Address{% endblock form_title %}
+
+{% block form %}
+
+<p class="mt-4">
+    We have sent an email to you with a link to verify your email
+    address.  If you do not see the verification e-mail in your main
+    inbox, check your spam folder.
+</p>
+<a href="{% url 'home' %}" class="block mt-4 text-indigo-700 underline">Go Home</a>
+
+{% endblock form %}

@@ -1,0 +1,76 @@
+name: Django CI
+
+on:
+    push:
+        branches: [master]
+    pull_request:
+        branches: [master]
+
+concurrency:
+    group: ci-${{ github.head_ref || github.run_id }}
+    cancel-in-progress: true
+
+jobs:
+    build:
+        runs-on: ubuntu-latest
+        strategy:
+            matrix:
+                python-version: ['3.11']
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: Set up Python ${{ matrix.python-version }}
+              uses: actions/setup-python@v4
+              with:
+                  python-version: ${{ matrix.python-version }}
+                  cache: 'pipenv'
+
+            - name: Install pipenv
+              run: pip install pipenv
+
+            - name: Install dependencies
+              run: pipenv sync --dev
+
+            - name: Build static
+              run: |
+                  sudo apt-get update
+                  wget -qO- https://deb.nodesource.com/setup_18.x | sudo bash -
+                  sudo apt-get install -y nodejs
+                  npm install -g pnpm
+                  pnpm install
+                  pnpm build
+
+            - name: Setup staticfiles
+              run: pipenv run python manage.py collectstatic --noinput
+
+            - name: Lint Python
+              run: pipenv run ruff .
+
+            - name: Test Python
+              run: pipenv run pytest --cov
+
+            - name: Lint JS
+              run: pnpm lint
+
+            - name: Test JS
+              run: pnpm test
+
+    deploy:
+        needs: [build]
+        runs-on: ubuntu-latest
+        environment: production
+        if: ${{ !contains(github.event.head_commit.message, 'NO_DEPLOY') && github.ref == 'refs/heads/master' }}
+
+        steps:
+            - uses: actions/checkout@v3
+
+            - name: 🛠️ Setup Fly
+              uses: superfly/flyctl-actions/setup-flyctl@master
+
+            - name: 🚀 Deploy To Fly
+              run: |
+                  flyctl secrets set DJANGO_SECRET_KEY='${{ secrets.DJANGO_SECRET_KEY }}'
+                  flyctl deploy --remote-only
+              env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_ACCESS_TOKEN }}

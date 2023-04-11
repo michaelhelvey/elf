@@ -1,0 +1,27 @@
+{% extends "./_partials/account_form_base.html" %}
+
+{% block page_title %}Confirm Email Address{% endblock page_title %}
+
+{% block form_title %}Confirm Email Address{% endblock form_title %}
+
+{% block form %}
+
+{% if confirmation %}
+<p class="mt-2">
+    {% with confirmation.email_address.email as email %}
+        Please confirm your email address: <a href="mailto:{{ email }}">{{ email }}</a>
+    {% endwith %}
+</p>
+<form method="POST" action="{% url 'account_confirm_email' confirmation.key %}" class="grid grid-cols-1 gap-4 mt-8">
+    {% csrf_token %}
+
+    <button id="confirm-address-button" class="button" type="submit">Confirm</button>
+</form>
+{% else %}
+{% url 'account_email' as email_url %}
+<p class="mt-2">
+    This e-mail confirmation link expired or is invalid. Please <a href="{{ email_url }}">issue a new e-mail confirmation request</a>.
+</p>
+{% endif %}
+
+{% endblock form %}

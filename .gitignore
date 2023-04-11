@@ -1,0 +1,26 @@
+# Build / vendor artifacts:
+node_modules
+__pycache__/
+
+# Distribution / packaging
+.Python
+build/
+dist/
+
+# Development
+*.log
+*.sqlite3
+.env.*
+.ruff_cache
+.coverage
+coverage
+.eslintcache
+
+# Editors
+.vscode
+
+# Django
+staticfiles
+.pytest_cache
+emails
+

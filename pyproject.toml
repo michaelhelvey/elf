@@ -1,0 +1,22 @@
+[tool.black]
+line-length = 100
+
+[tool.ruff]
+line-length = 100
+exclude = [
+    "migrations",
+    "__init__.py"
+]
+
+[tool.pytest.ini_options]
+env = [
+    "DJANGO_SETTINGS_MODULE=base_site.settings",
+    "DJANGO_ENV=test",
+]
+
+[tool.coverage.run]
+omit = [
+    "app/utils/test.py",
+    "base_site/settings.py",
+    "base_site/urls.py"
+]

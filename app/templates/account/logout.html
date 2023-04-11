@@ -1,0 +1,20 @@
+{% extends './_partials/account_form_base.html' %}
+
+{% block page_title %}Log Out{% endblock page_title %}
+
+{% block form_title %}Log Out{% endblock form_title %}
+
+{% block form %}
+
+<p class="mt-4">Are you sure you want to log out?</p>
+<form method="POST" action="{% url 'account_logout' %}" class="grid grid-cols-1 gap-4 mt-8">
+	{% csrf_token %}
+
+	{% if redirect_field_value %}
+		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}"/>
+	{% endif %}
+
+	<button class="button" type="submit">Log Out</button>
+</form>
+
+{% endblock form %}

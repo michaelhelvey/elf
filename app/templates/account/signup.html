@@ -1,0 +1,27 @@
+{% extends './_partials/account_form_base.html' %}
+
+{% block page_title %}Create Account{% endblock page_title %}
+
+{% block form_title %}Create Account{% endblock form_title %}
+
+{% block form %}
+
+<form method="POST" action="{% url 'account_signup' %}" class="grid grid-cols-1 gap-4 mt-8">
+	{% csrf_token %}
+
+	{{ form.as_div }}
+
+	{% if redirect_field_value %}
+		<input type="hidden" name="{{ redirect_field_name }}" value="{{ redirect_field_value }}" />
+	{% endif %}
+
+	<button class="button" type="submit">Create Account</button>
+	<div class="text-sm text-slate-600">
+		Already have an account?
+		<a class="underline text-indigo-700" href="{% url 'account_login' %}">
+			Log in.
+		</a>
+	</div>
+</form>
+
+{% endblock form %}

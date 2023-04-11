@@ -1,0 +1,42 @@
+{% load static %} {% load icons %}
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="{% static 'build/css/tailwind.css' %}" />
+		<script defer src="{% static 'build/js/global/index.js' %}"></script>
+		<link rel="icon" href="{% static 'img/favicon.ico' %}" />
+		<title>{% block page_title %}Django Goblincore Stack{% endblock page_title %}</title>
+
+		{% block head %}
+		{% endblock head %}
+	</head>
+
+	<body class="flex flex-col">
+		{% include "layout/partials/header.html" %}
+
+		{% if messages %}
+		<ul class="messages-list text-sm absolute bottom-5 right-5 max-w-sm animate-fade-in">
+			{% for message in messages %}
+				<li
+					x-data='{ show: true }'
+					x-show='show'
+					class="{{ message.tags }} rounded py-1 px-2 my-1 flex items-center gap-4">
+					<button aria-label="Close message" @click="show = false">
+						{% icon 'x-mark' 'w-4 h-4' %}
+					</button>
+					{{ message }}
+				</li>
+			{% endfor %}
+		</ul>
+		{% endif %}
+
+		<main class="flex flex-1">
+			{% block content %}
+			{% endblock %}
+		</main>
+		{% include "layout/partials/footer.html" %}
+	</body>
+</html>

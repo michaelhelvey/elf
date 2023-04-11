@@ -1,0 +1,14 @@
+{% load static %}
+
+<header class="px-8 py-4 border-b border-gray-300 shadow-sm">
+	<nav class="flex items-center justify-between">
+		<a href="{% url 'home' %}" aria-label="Home" class="flex items-center gap-3">
+			<img
+				src="{% static 'img/goblincore_stack.png' %}"
+				alt="Site Logo"
+				class="w-12 h-12 object-center shadow border border-gray-300 rounded-full"
+			/>
+			<span class="text-slate-900 font-bold text-lg">Django Goblincore Stack</span>
+		</a>
+	</nav>
+</header>

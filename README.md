@@ -1,6 +1,6 @@
-# Django Goblincore Stack
+# Elf
 
-My opinionated personal stack for building [Django](https://www.django-project.com) projects.
+The easiest way to share wishlists online
 
 ## Getting Started
 
@@ -10,13 +10,6 @@ My opinionated personal stack for building [Django](https://www.django-project.c
 -   Node.js LTS
 -   PNPM
 -   [just](https://github.com/casey/just)
-
-**Starting a new project**
-
-To start a new project, run `npx degit michaelhelvey/django-goblincore-stack <your-project-name>`
-Then run `just install`.
-
-Then change `django-goblincore-stack` throughout the app to your project name.
 
 ## Local Development
 

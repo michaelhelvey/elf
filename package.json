@@ -1,5 +1,5 @@
 {
-	"name": "django-goblincore-stack",
+	"name": "elf",
 	"private": true,
 	"main": "index.js",
 	"scripts": {

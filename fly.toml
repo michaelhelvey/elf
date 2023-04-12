@@ -1,6 +1,6 @@
-# fly.toml file generated for django-goblincore-stack on 2023-04-02T18:05:59-05:00
+# fly.toml file generated for elf on 2023-04-02T18:05:59-05:00
 
-app = "django-goblincore-stack"
+app = "elf"
 kill_signal = "SIGINT"
 kill_timeout = 5
 primary_region = "den"

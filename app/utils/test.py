@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 from bs4.element import Tag
 from django.core import mail
 from django.test import TestCase as DjangoTestCase
+from django.urls import reverse
 
 
 class IntegrationTestCase(DjangoTestCase):
@@ -24,6 +25,9 @@ class IntegrationTestCase(DjangoTestCase):
         self.assertTrue("form" in response.context_data, "No form in context")
         return response.context_data["form"].errors
 
+    def getLoginNextUrl(self, baseUrl):
+        return f"{reverse('account_login')}?next={baseUrl}"
+
     def assertLinkGoesToUrl(self, response, selector, url):
         link = self.getBySelectorOrFail(response, selector)
         response = self.client.get(link["href"])
@@ -37,6 +41,7 @@ class IntegrationTestCase(DjangoTestCase):
         self.assertTrue(response.status_code < 400)
         response_url = response.url if hasattr(response, "url") else response._request.path_info
         self.assertEqual(response_url, url)
+
 
     def assertSelectorDoesNotExist(self, response, selector):
         element = self.getBySelector(response, selector)

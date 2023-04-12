@@ -18,7 +18,7 @@ body {
 }
 
 .button {
-	@apply bg-indigo-600 text-white font-medium py-2 px-4 rounded;
+	@apply bg-purple-600 text-white font-medium py-2 px-4 rounded;
 }
 
 .errorlist {

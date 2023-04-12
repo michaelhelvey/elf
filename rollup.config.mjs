@@ -35,15 +35,4 @@ export default [
 		},
 		plugins: jsPlugins,
 	},
-	{
-		input: {
-			example_app: join(JS_PATH, 'example-app/index.tsx'),
-		},
-		output: {
-			dir: join(buildDir('js'), 'apps'),
-			format: 'es',
-			sourcemap: process.env.NODE_ENV !== 'production',
-		},
-		plugins: jsPlugins,
-	},
 ]

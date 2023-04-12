@@ -7,6 +7,7 @@ import tsconfigPaths from 'vite-tsconfig-paths'
 export default defineConfig({
 	plugins: [tsconfigPaths(), preact()],
 	test: {
+		passWithNoTests: true,
 		globals: true,
 		include: ['**/app/static/js/**{test,spec}.{ts,tsx}'],
 		environment: 'happy-dom',

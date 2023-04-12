@@ -9,21 +9,9 @@ from app.utils.test import IntegrationTestCase
 
 
 class UserHomePageTest(IntegrationTestCase):
-    def test_home_page_shows_login_link_to_logged_out_user(self):
+    def test_home_page_redirects_to_login(self):
         response = self.client.get(reverse("home"))
-        login_link = self.getBySelectorOrFail(response, "a#login-link")
-        self.assertEqual(login_link.text.strip(), "Log In")
-
-        self.assertSelectorDoesNotExist(response, "a#logout-link")
-        self.assertLinkGoesToUrl(response, "a#login-link", reverse("account_login"))
-
-    def test_home_page_shows_log_out_link_to_logged_in_user(self):
-        user = UserFactory()
-        self.client.force_login(user)
-
-        response = self.client.get(reverse("home"))
-        self.assertSelectorDoesNotExist(response, "a#login-link")
-        self.assertLinkGoesToUrl(response, "a#logout-link", reverse("account_logout"))
+        self.assertRedirects(response, self.getLoginNextUrl(reverse("home")))
 
 
 class LoginTest(IntegrationTestCase):
@@ -137,6 +125,9 @@ class UserLogOutTest(IntegrationTestCase):
         self.assertEqual(response.status_code, 302)
 
         response = self.client.get(response.url)
+        self.assertRedirects(response, self.getLoginNextUrl(reverse("home")))
+
+        response = self.client.get(response.url)
         self.assertEqual(response.status_code, 200)
         self.assertFalse(response.context["user"].is_authenticated)
 
@@ -157,7 +148,7 @@ class PasswordResetTest(IntegrationTestCase):
 
         response = self.client.get(response.url)
         self.assertPageHasTitle(response, "Password Reset Sent")
-        self.assertLinkGoesToUrl(response, "a#home-link", reverse("home"))
+        self.assertLinkGoesToUrl(response, "a#home-link", self.getLoginNextUrl(reverse("home")))
 
         email = self.getLastEmail()
         reset_link_regex = r"reset your password.\s+(http:.*/accounts/password/reset/key/.*)\n"

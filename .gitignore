@@ -19,6 +19,9 @@ coverage
 # Editors
 .vscode
 
+# OS
+.DS_Store
+
 # Django
 staticfiles
 .pytest_cache

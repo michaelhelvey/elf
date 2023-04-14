@@ -42,7 +42,6 @@ class IntegrationTestCase(DjangoTestCase):
         response_url = response.url if hasattr(response, "url") else response._request.path_info
         self.assertEqual(response_url, url)
 
-
     def assertSelectorDoesNotExist(self, response, selector):
         element = self.getBySelector(response, selector)
         self.assertIsNone(element)

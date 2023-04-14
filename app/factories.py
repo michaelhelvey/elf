@@ -2,7 +2,7 @@ import factory
 from allauth.account.models import EmailAddress
 from factory.django import DjangoModelFactory
 
-from app.models import User
+from app.models import List, ListItem, User
 
 
 class UserFactory(DjangoModelFactory):
@@ -22,3 +22,21 @@ class UserFactory(DjangoModelFactory):
             return
 
         EmailAddress.objects.create(user=self, email=self.email, primary=True, verified=True)
+
+
+class ListFactory(DjangoModelFactory):
+    class Meta:
+        model = List
+
+    user = factory.SubFactory(UserFactory)
+    title = factory.Faker("sentence", nb_words=3)
+
+
+class ListItemFactory(DjangoModelFactory):
+    class Meta:
+        model = ListItem
+
+    list = factory.SubFactory(ListFactory)
+    title = factory.Faker("sentence", nb_words=3)
+    notes = factory.Faker("paragraph", nb_sentences=3)
+    purchased = factory.Faker("boolean")

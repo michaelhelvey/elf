@@ -20,13 +20,16 @@ from django.urls import include, path
 from app.api.router import router
 from app.views.accounts.profile import UserProfileView
 from app.views.home import HomeView
+from app.views.lists import ListCreateView, ListDetailView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path("", HomeView.as_view(), name="home"),
     path("accounts/", include("allauth.urls")),
     path("accounts/profile/", UserProfileView.as_view(), name="profile"),
     path("api/", include(router.urls)),
+    path("", HomeView.as_view(), name="home"),
+    path("lists/create", ListCreateView.as_view(), name="list_create"),
+    path("lists/<int:pk>/", ListDetailView.as_view(), name="list_detail"),
 ]
 
 if settings.DEBUG:

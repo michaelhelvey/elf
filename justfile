@@ -14,7 +14,7 @@ migrate:
 
 alias t := test
 test *ARGS:
-	pipenv run pytest {{ARGS}}
+	pipenv run pytest -Wignore {{ARGS}}
 
 test_coverage *ARGS:
 	pipenv run pytest --cov {{ARGS}}

@@ -5,6 +5,7 @@ from django.urls import reverse
 class List(models.Model):
     title = models.CharField(max_length=255)
     user = models.ForeignKey("app.User", related_name="lists", on_delete=models.CASCADE)
+    shared_with = models.ManyToManyField("app.User", related_name="shared_lists")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

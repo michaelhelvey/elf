@@ -20,10 +20,22 @@ class ListCreateView(LoginRequiredMixin, CreateView):
 
 class UserOwnsListMixin(PermissionRequiredMixin):
     def has_permission(self):
-        return self.request.user == self.get_object().user
+        the_list = self.get_object()
+        is_owner = self.request.user == the_list.user
+        is_shared_with = self.request.user in the_list.shared_with.all()
+
+        return is_owner or is_shared_with
 
 
 class ListDetailView(LoginRequiredMixin, UserOwnsListMixin, DetailView):
     model = List
     template_name = "lists/list_detail.html"
     context_object_name = "list"
+
+    def get_context_data(self, object, **kwargs):
+        context = super().get_context_data(**kwargs)
+        return {**context, "shared_by": self._get_shared_by(object)}
+
+    def _get_shared_by(self, the_list):
+        if the_list.shared_with.filter(pk=self.request.user.pk).exists():
+            return the_list.user

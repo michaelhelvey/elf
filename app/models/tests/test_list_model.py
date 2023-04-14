@@ -20,3 +20,11 @@ class TestList(TestCase):
         the_list = ListFactory(title="Christmas 2022")
         item = ListItemFactory(title="My Great Item", list=the_list)
         self.assertEqual(str(item), "Christmas 2022: My Great Item")
+
+    def test_a_user_can_share_lists(self):
+        user = UserFactory()
+        other_user = UserFactory()
+        the_list = ListFactory(user=user)
+        the_list.shared_with.add(other_user)
+        self.assertEqual(the_list.shared_with.count(), 1)
+        self.assertEqual(the_list.shared_with.first(), other_user)

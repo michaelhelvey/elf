@@ -1,5 +1,9 @@
 <h1>{{ list.title }}</h1>
 
+{% if shared_by %}
+    <div id="share-message">Shared with you by {{ shared_by.name }}</div>
+{% endif %}
+
 
 <ul>
     {% for item in list.items.all %}

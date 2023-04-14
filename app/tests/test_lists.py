@@ -29,7 +29,7 @@ class ListCreateViewTests(IntegrationTestCase):
         self.assertRedirects(response, self.getLoginNextUrl(reverse("list_create")))
 
 
-class ListDetailViewTest(IntegrationTestCase):
+class ListDetailViewTests(IntegrationTestCase):
     def setUp(self):
         self.user = UserFactory()
         self.client.force_login(self.user)
@@ -42,7 +42,7 @@ class ListDetailViewTest(IntegrationTestCase):
             response, self.getLoginNextUrl(reverse("list_detail", kwargs={"pk": 1}))
         )
 
-    def test_user_can_only_view_their_own_lists(self):
+    def test_user_cannot_view_lists_owned_by_others(self):
         ListFactory(user=self.user)
         other_user = UserFactory()
         other_list = ListFactory(user=other_user)
@@ -66,4 +66,21 @@ class ListDetailViewTest(IntegrationTestCase):
         self.assertEqual(
             self.getBySelectorOrFail(response, f"li[data-item-id='{item2.pk}']").text,
             item2.title,
+        )
+
+        self.assertIsNone(self.getBySelector(response, "div#share-message"))
+
+    def test_a_user_can_view_lists_shared_with_them(self):
+        other_user = UserFactory()
+        the_list = ListFactory(user=other_user)
+        the_list.shared_with.add(self.user)
+
+        response = self.client.get(reverse("list_detail", kwargs={"pk": the_list.pk}))
+
+        self.assertEqual(response.status_code, 200)
+
+        self.assertEqual(self.getBySelectorOrFail(response, "h1").text, the_list.title)
+        self.assertEqual(
+            self.getBySelectorOrFail(response, "div#share-message").text,
+            f"Shared with you by {other_user.name}",
         )

@@ -1,6 +1,7 @@
 from django.urls import reverse
 
 from app.factories import ListFactory, UserFactory
+from app.models import List
 from app.utils.test import IntegrationTestCase
 
 
@@ -22,12 +23,29 @@ class HomeViewTests(IntegrationTestCase):
             self.getBySelectorOrFail(response, "h2#shared-lists").text, "Shared With Me"
         )
         self.assertEqual(
-            self.getBySelectorOrFail(response, f"div[data-list-id='{owned_list.pk}']").text,
+            self.getBySelectorOrFail(response, f"a[data-list-id='{owned_list.pk}']").text,
             owned_list.title,
         )
         self.assertEqual(
-            self.getBySelectorOrFail(response, f'div[data-list-id="{shared_list.pk}"]').text,
+            self.getBySelectorOrFail(response, f'a[data-list-id="{shared_list.pk}"]').text,
             shared_list.title,
+        )
+
+    def test_lists_empty_state(self):
+        response = self.client.get(reverse("home"))
+
+        # sanity check that the user doesn't have any lists to show
+        self.assertEqual(List.objects.filter(user=self.user).count(), 0)
+        self.assertEqual(self.user.lists.count(), 0)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            self.getBySelectorOrFail(response, "p#empty-lists-text").text,
+            "You don't have any lists yet.",
+        )
+        self.assertEqual(
+            self.getBySelectorOrFail(response, "p#empty-shared-text").text,
+            "No lists have been shared with you yet.",
         )
 
 

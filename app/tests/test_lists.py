@@ -4,6 +4,33 @@ from app.factories import ListFactory, UserFactory
 from app.utils.test import IntegrationTestCase
 
 
+class HomeViewTests(IntegrationTestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.client.force_login(self.user)
+
+    def test_logged_in_user_sees_owned_and_shared_lists(self):
+        owned_list = ListFactory(user=self.user)
+        shared_list = ListFactory()
+        shared_list.shared_with.add(self.user)
+
+        response = self.client.get(reverse("home"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(self.getBySelectorOrFail(response, "h2#my-lists").text, "My Lists")
+        self.assertEqual(
+            self.getBySelectorOrFail(response, "h2#shared-lists").text, "Shared With Me"
+        )
+        self.assertEqual(
+            self.getBySelectorOrFail(response, f"div[data-list-id='{owned_list.pk}']").text,
+            owned_list.title,
+        )
+        self.assertEqual(
+            self.getBySelectorOrFail(response, f'div[data-list-id="{shared_list.pk}"]').text,
+            shared_list.title,
+        )
+
+
 class ListCreateViewTests(IntegrationTestCase):
     def setUp(self):
         self.user = UserFactory()

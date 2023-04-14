@@ -3,16 +3,17 @@
 
 {% block content %}
 
+<h1 class="sr-only">Elf</h1>
 <div class="flex flex-col items-center justify-center w-full h-full">
-	<h1 class="text-purple-900 font-black text-3xl">Hello, world!</h1>
+	<h2 id="my-lists">My Lists</h2>
+	{% for list in owned_lists %}
+		<div data-list-id="{{ list.pk }}">{{ list }}</div>
+	{% endfor %}
 
-	{% if not user.is_authenticated %}
-	<a id="login-link" href="{% url 'account_login' %}" class="button mt-4">Log In</a>
-	{% else %}
-	<a id="logout-link" href="{% url 'account_logout' %}" class="button mt-4">Log Out</a>
-	{% endif %}
-
-	<div id="app"></div>
+	<h2 id="shared-lists">Shared With Me</h2>
+	{% for list in shared_lists %}
+		<div data-list-id="{{ list.pk }}">{{ list }}</div>
+	{% endfor %}
 </div>
 
 {% endblock %}

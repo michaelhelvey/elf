@@ -1,4 +1,5 @@
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import (LoginRequiredMixin,
+                                        PermissionRequiredMixin)
 from django.views.generic import CreateView, DetailView
 
 from app.models import List
@@ -17,6 +18,12 @@ class ListCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class ListDetailView(DetailView):
+class UserOwnsListMixin(PermissionRequiredMixin):
+    def has_permission(self):
+        return self.request.user == self.get_object().user
+
+
+class ListDetailView(LoginRequiredMixin, UserOwnsListMixin, DetailView):
     model = List
     template_name = "lists/list_detail.html"
+    context_object_name = "list"

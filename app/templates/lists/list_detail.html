@@ -1,0 +1,8 @@
+<h1>{{ list.title }}</h1>
+
+
+<ul>
+    {% for item in list.items.all %}
+        <li data-item-id="{{ item.pk }}">{{item.title}}</li>
+    {% endfor %}
+</ul>

@@ -1,5 +1,4 @@
-from django.contrib.auth.mixins import (LoginRequiredMixin,
-                                        PermissionRequiredMixin)
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views.generic import CreateView, DetailView
 
 from app.models import List
@@ -37,5 +36,5 @@ class ListDetailView(LoginRequiredMixin, UserOwnsListMixin, DetailView):
         return {**context, "shared_by": self._get_shared_by(object)}
 
     def _get_shared_by(self, the_list):
-        if the_list.shared_with.filter(pk=self.request.user.pk).exists():
+        if the_list.is_shared_with(self.request.user):
             return the_list.user

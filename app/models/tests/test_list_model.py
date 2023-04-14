@@ -28,3 +28,10 @@ class TestList(TestCase):
         the_list.shared_with.add(other_user)
         self.assertEqual(the_list.shared_with.count(), 1)
         self.assertEqual(the_list.shared_with.first(), other_user)
+
+    def test_shared_by_returns_true_if_list_is_shared(self):
+        user = UserFactory()
+        other_user = UserFactory()
+        the_list = ListFactory(user=user)
+        the_list.shared_with.add(other_user)
+        self.assertTrue(the_list.is_shared_with(other_user))

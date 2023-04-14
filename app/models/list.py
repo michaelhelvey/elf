@@ -15,6 +15,9 @@ class List(models.Model):
     def get_absolute_url(self):
         return reverse("list_detail", kwargs={"pk": self.pk})
 
+    def is_shared_with(self, user):
+        return self.shared_with.filter(pk=user.pk).exists()
+
 
 class ListItem(models.Model):
     list = models.ForeignKey("app.List", related_name="items", on_delete=models.CASCADE)

@@ -1,7 +1,15 @@
-<h1>Create a new list</h1>
+{% extends 'layout/base.html' %}
 
-<form method="POST">
-    {% csrf_token %}
-    {{ form }}
-    <button type="submit">Create List</button>
-</form>
+{% block page_title %}Create a new list{% endblock page_title %}
+
+{% block content %}
+<div class="flex flex-col p-6 items-center justify-center w-full h-full">
+    <h1 class="font-bold text-2xl">New List</h1>
+
+    <form method="POST" class="flex flex-col p-4 border border-slate-300 rounded mt-4 w-full max-w-sm">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit" class="button mt-4">Create List</button>
+    </form>
+</div>
+{% endblock content %}

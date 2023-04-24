@@ -18,16 +18,22 @@ class HomeViewTests(IntegrationTestCase):
         response = self.client.get(reverse("home"))
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.getBySelectorOrFail(response, "h2#my-lists").text, "My Lists")
         self.assertEqual(
-            self.getBySelectorOrFail(response, "h2#shared-lists").text, "Shared With Me"
+            self.getBySelectorOrFail(response, "#my-lists h2").text.strip(), "My Lists"
         )
         self.assertEqual(
-            self.getBySelectorOrFail(response, f"a[data-list-id='{owned_list.pk}']").text,
+            self.getBySelectorOrFail(response, "#shared-lists h2").text.strip(), "Shared With Me"
+        )
+        self.assertEqual(
+            self.getBySelectorOrFail(
+                response, f"article[data-list-id='{owned_list.pk}'] h1"
+            ).text.strip(),
             owned_list.title,
         )
         self.assertEqual(
-            self.getBySelectorOrFail(response, f'a[data-list-id="{shared_list.pk}"]').text,
+            self.getBySelectorOrFail(
+                response, f'article[data-list-id="{shared_list.pk}"] h1'
+            ).text.strip(),
             shared_list.title,
         )
 
@@ -40,11 +46,11 @@ class HomeViewTests(IntegrationTestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(
-            self.getBySelectorOrFail(response, "p#empty-lists-text").text,
+            self.getBySelectorOrFail(response, "#my-lists #empty-lists-text").text,
             "You don't have any lists yet.",
         )
         self.assertEqual(
-            self.getBySelectorOrFail(response, "p#empty-shared-text").text,
+            self.getBySelectorOrFail(response, "#shared-lists #empty-lists-text").text,
             "No lists have been shared with you yet.",
         )
 
@@ -57,7 +63,7 @@ class ListCreateViewTests(IntegrationTestCase):
     def test_a_user_can_view_the_list_create_page(self):
         response = self.client.get(reverse("list_create"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(self.getBySelectorOrFail(response, "h1").text, "Create a new list")
+        self.assertEqual(self.getBySelectorOrFail(response, "h1").text, "New List")
 
     def test_a_user_can_create_a_list(self):
         response = self.client.post(reverse("list_create"), {"title": "My Great List"})

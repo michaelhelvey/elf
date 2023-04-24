@@ -1,12 +1,28 @@
-<h1>{{ list.title }}</h1>
+{% extends 'layout/base.html' %}
 
-{% if shared_by %}
-    <div id="share-message">Shared with you by {{ shared_by.name }}</div>
-{% endif %}
+{% block page_title %}{{list.title}} - Elf{% endblock page_title %}
 
+{% block content %}
 
-<ul>
-    {% for item in list.items.all %}
-        <li data-item-id="{{ item.pk }}">{{item.title}}</li>
-    {% endfor %}
-</ul>
+<div class="flex w-full h-full justify-center">
+	<div class="w-full max-w-2xl flex flex-col p-4">
+        <h1 class="sr-only">{{ list.title }}</h1>
+
+        <div id="breadcrumbs" class="text-sm text-gray-700">
+            <a href="{% url 'home' %}" class="hover:underline">My Lists</a>
+            <span class="separator">/</span>
+            <span>{{ list.title }}</span>
+        </div>
+
+        {% if shared_by %}
+            <div id="share-message">Shared with you by {{ shared_by.name }}</div>
+        {% endif %}
+
+        <ul>
+            {% for item in list.items.all %}
+                <li data-item-id="{{ item.pk }}">{{item.title}}</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock content %}

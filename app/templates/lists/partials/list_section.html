@@ -1,0 +1,28 @@
+<!-- List of lists -->
+
+{% load icons %}
+
+<div class="flex items-center justify-between w-full border-b border-gray-300 py-1">
+  <h2 class="my-2 text-lg font-bold text-gray-900">{{ section_title}} </h2>
+  {% if show_create_button %}
+    <a href="{% url 'list_create' %}">
+      {% icon 'plus-circle' 'w-5 h-5 text-gray-700' %}
+    </a>
+  {% endif %}
+</div>
+{% if not lists.count %}
+  <div id="empty-lists-text" class="text-sm text-gray-700 italic mt-4">{{ empty_text }}</div>
+{% else %}
+{% for list in lists %}
+  <article class="flex items-center justify-between my-2" data-list-id="{{ list.pk }}">
+    <div>
+      <h1 class="font-medium text-sm text-gray-900">{{ list.title }}</h1>
+      <span class="text-xs text-gray-500">Created on {{ list.created_at }}</span>
+    </div>
+
+    <a href="{{ list.get_absolute_url }}" class="shadow-sm px-2 py-1 rounded border border-gray-400 font-medium text-gray-900">
+      View List
+    </a>
+  </article>
+{% endfor %}
+{% endif %}

@@ -16,9 +16,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 			<header className='p-4 flex justify-between container'>
 				<Link to='/'>
 					<img
-						src='/goblincore_stack.png'
-						alt='Goblincore logo'
-						className='h-12 w-12 border border-muted rounded-full shadow-sm hover:scale-125 transition-transform ease-in-out duration-150'
+						src='elf.png'
+						alt='Elf logo'
+						className='h-12 w-12 border border-muted rounded-full shadow-sm hover:scale-110 transition-transform ease-in-out duration-150'
 					/>
 				</Link>
 				<div className='flex items-center gap-6'>
@@ -36,7 +36,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 				</div>
 			</header>
 			<main className='flex flex-col flex-1'>{children}</main>
-			<footer className='p-4 container text-muted-foreground text-sm'>
+			<footer className='p-4 container text-muted-foreground/50 text-xs'>
 				Copyright &copy; Michael Helvey {new Date().getFullYear()}
 			</footer>
 		</>

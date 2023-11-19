@@ -24,7 +24,7 @@ export const links: LinksFunction = () => [
 
 export const meta: MetaFunction = () => [
 	{
-		title: 'Remix Goblincore Stack',
+		title: 'Elf',
 	},
 	{
 		name: 'viewport',
@@ -63,7 +63,7 @@ function App() {
 				<Meta />
 				<Links />
 			</head>
-			<body className={clsx('flex flex-col', { dark: theme === 'dark' })}>
+			<body className={clsx('flex flex-col', { dark: theme !== 'light' })}>
 				<AppLayout>
 					<Outlet />
 				</AppLayout>

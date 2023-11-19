@@ -1,10 +1,11 @@
-app = "remix-goblincore-stack"
+app = "elf"
 
 kill_signal = "SIGINT"
 kill_timeout = 5
 processes = []
 
 [env]
+NODE_ENV = "production"
 PORT = "8080"
 
 [deploy]

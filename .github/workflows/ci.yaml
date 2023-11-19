@@ -1,0 +1,168 @@
+name: CI/CD
+
+on:
+    push:
+        branches:
+            - master
+    pull_request:
+        branches:
+            - master
+
+jobs:
+    build:
+        name: 🔨 Build
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: 'pnpm'
+                  cache-dependency-path: './pnpm-lock.yaml'
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Build application
+              run: pnpm build
+
+    lint:
+        name: 👺 Lint
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: 'pnpm'
+                  cache-dependency-path: './pnpm-lock.yaml'
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Build application
+              run: pnpm lint
+
+    test_unit:
+        name: 🧪 Unit Test
+        runs-on: ubuntu-latest
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: 'pnpm'
+                  cache-dependency-path: './pnpm-lock.yaml'
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Execute Unit Tests
+              run: pnpm test
+
+    test_e2e:
+        name: 🧪 E2E Test
+        runs-on: ubuntu-latest
+        services:
+            postgres:
+                image: postgres:latest
+                env:
+                    POSTGRES_USER: postgres
+                    POSTGRES_PASSWORD: postgres
+                    POSTGRES_DB: postgres
+                ports:
+                    - 5436:5432
+                options:
+                    --health-cmd pg_isready --health-interval 10s --health-timeout 5s
+                    --health-retries 5
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: 'pnpm'
+                  cache-dependency-path: './pnpm-lock.yaml'
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Install Playwright Browsers
+              run: pnpm exec playwright install --with-deps
+
+            - name: Setup Environment Variables
+              run: cp .env.example .env
+
+            - name: Migrate Database
+              run: pnpm db:migrate
+
+            - name: Execute E2E Tests
+              run: pnpm test:e2e
+
+    deploy_prod:
+        name: 🚀 Deploy to Production
+        runs-on: ubuntu-latest
+        needs: [build, lint, test_unit, test_e2e]
+        if: ${{ github.ref == 'refs/heads/master' && github.event_name == 'push' }}
+        steps:
+            - name: Checkout Repository
+              uses: actions/checkout@v4
+
+            - name: Setup PNPM
+              uses: pnpm/action-setup@v2
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: .nvmrc
+                  cache: 'pnpm'
+                  cache-dependency-path: './pnpm-lock.yaml'
+
+            - name: Install dependencies
+              run: pnpm install
+
+            - name: Build application
+              run: pnpm build
+
+            - name: Prune Dependencies
+              run: pnpm prune --prod
+
+            - name: Read app name
+              uses: SebRollen/toml-action@v1.0.2
+              id: app_name
+              with:
+                  file: fly.toml
+                  field: app
+
+            - name: Setup Fly
+              uses: superfly/flyctl-actions/setup-flyctl@v1.4
+
+            - name: Deploy to Production
+              run:
+                  flyctl deploy --remote-only --build-arg COMMIT_SHA=${{ github.sha }} --app ${{
+                  steps.app_name.outputs.value }}
+              env:
+                  FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

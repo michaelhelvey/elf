@@ -10,7 +10,7 @@ import { SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import { MoonIcon } from '@radix-ui/react-icons'
 import { Link } from '@remix-run/react'
 
-export function AppLayout({ children }: { children: React.ReactNode }) {
+export function AppLayout({ children, strip }: { children: React.ReactNode; strip: boolean }) {
 	return (
 		<>
 			<header className='p-4 flex justify-between container'>
@@ -23,16 +23,20 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 				</Link>
 				<div className='flex items-center gap-6'>
 					<AppearanceToggle />
-					<SignedIn>
-						<div className='w-8 h-8'>
-							<UserButton />
-						</div>
-					</SignedIn>
-					<SignedOut>
-						<Button asChild variant={'link'}>
-							<Link to='/login'>Log In</Link>
-						</Button>
-					</SignedOut>
+					{!strip && (
+						<>
+							<SignedIn>
+								<div className='w-8 h-8'>
+									<UserButton />
+								</div>
+							</SignedIn>
+							<SignedOut>
+								<Button asChild variant={'link'}>
+									<Link to='/login'>Log In</Link>
+								</Button>
+							</SignedOut>
+						</>
+					)}
 				</div>
 			</header>
 			<main className='flex flex-col flex-1'>{children}</main>

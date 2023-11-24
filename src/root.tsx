@@ -8,9 +8,12 @@ import {
 	Outlet,
 	Scripts,
 	ScrollRestoration,
+	isRouteErrorResponse,
 	useLoaderData,
+	useRouteError,
 } from '@remix-run/react'
 import clsx from 'clsx'
+import Cookies from 'js-cookie'
 import { AppLayout } from './components/layout'
 import { ssrReadColorTheme } from './components/ui/utils'
 import stylesheet from './globals.css'
@@ -49,14 +52,15 @@ export const loader: LoaderFunction = args => {
 	)
 }
 
-export const ErrorBoundary = ClerkErrorBoundary()
-
-function App() {
-	// Sadly, this cast seems to be required because @clerk/remix doesn't pass the underlying loader
-	// return type through, relying instead on the more generic (and useless) `LoaderFunctionReturn`
-	// type from remix, which is basically just Record<string, unknown>
-	const { theme } = useLoaderData<{ theme: string | undefined }>()
-
+const AppShell = ({
+	children,
+	theme,
+	strip,
+}: {
+	children: React.ReactNode
+	theme: string | undefined
+	strip?: boolean
+}) => {
 	return (
 		<html lang='en'>
 			<head>
@@ -64,14 +68,65 @@ function App() {
 				<Links />
 			</head>
 			<body className={clsx('flex flex-col', { dark: theme !== 'light' })}>
-				<AppLayout>
-					<Outlet />
-				</AppLayout>
+				<AppLayout strip={!!strip}>{children}</AppLayout>
 				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />
 			</body>
 		</html>
+	)
+}
+
+const ErrorPageWrapper = ({ children }: { children: React.ReactNode }) => {
+	return <div className='flex p-6 container flex-col'>{children}</div>
+}
+
+export function DefaultErrorBoundary() {
+	const error = useRouteError()
+	const theme = Cookies.get('theme') ?? 'dark'
+
+	if (isRouteErrorResponse(error)) {
+		return (
+			<AppShell theme={theme} strip>
+				<ErrorPageWrapper>
+					<h1 className='font-bold text-2xl mb-4'>
+						{error.status} {error.statusText}
+					</h1>
+					<h2 className='mt-8 mb-4 text-xl font-semibold'>Error Data:</h2>
+					<pre className='overflow-x-scroll'>{error.data}</pre>
+				</ErrorPageWrapper>
+			</AppShell>
+		)
+	} else if (error instanceof Error) {
+		return (
+			<AppShell theme={theme} strip>
+				<ErrorPageWrapper>
+					<h1 className='font-bold text-2xl mb-4'>Application Error</h1>
+					<p className='font-mono'>{error.message}</p>
+					<h2 className='mt-8 mb-4 text-xl font-semibold'>Stack Trace:</h2>
+					<pre className='overflow-x-scroll'>{error.stack}</pre>
+				</ErrorPageWrapper>
+			</AppShell>
+		)
+	} else {
+		return (
+			<AppShell theme={theme} strip>
+				<ErrorPageWrapper>
+					<h1 className='font-bold text-xl'>Unknown Error</h1>
+				</ErrorPageWrapper>
+			</AppShell>
+		)
+	}
+}
+
+export const ErrorBoundary = ClerkErrorBoundary(DefaultErrorBoundary)
+
+function App() {
+	const { theme } = useLoaderData<{ theme: string | undefined }>()
+	return (
+		<AppShell theme={theme}>
+			<Outlet></Outlet>
+		</AppShell>
 	)
 }
 

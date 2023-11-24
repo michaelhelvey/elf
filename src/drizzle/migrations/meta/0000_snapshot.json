@@ -1,5 +1,5 @@
 {
-	"id": "08be1bcc-1f1d-4ce4-9271-35416017a71d",
+	"id": "fff0e845-a315-4e71-b8f5-4bb883245f45",
 	"prevId": "00000000-0000-0000-0000-000000000000",
 	"version": "5",
 	"dialect": "pg",
@@ -25,6 +25,24 @@
 					"type": "text",
 					"primaryKey": false,
 					"notNull": true
+				},
+				"description": {
+					"name": "description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"link": {
+					"name": "link",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
+				},
+				"og_image_url": {
+					"name": "og_image_url",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": false
 				},
 				"purchased": {
 					"name": "purchased",
@@ -56,7 +74,7 @@
 					"tableTo": "lists",
 					"columnsFrom": ["list_id"],
 					"columnsTo": ["id"],
-					"onDelete": "no action",
+					"onDelete": "cascade",
 					"onUpdate": "no action"
 				}
 			},
@@ -85,6 +103,12 @@
 					"primaryKey": false,
 					"notNull": true
 				},
+				"description": {
+					"name": "description",
+					"type": "text",
+					"primaryKey": false,
+					"notNull": true
+				},
 				"created_at": {
 					"name": "created_at",
 					"type": "date",
@@ -108,7 +132,7 @@
 					"tableTo": "users",
 					"columnsFrom": ["owner_id"],
 					"columnsTo": ["id"],
-					"onDelete": "no action",
+					"onDelete": "cascade",
 					"onUpdate": "no action"
 				}
 			},
@@ -160,7 +184,7 @@
 					"tableTo": "lists",
 					"columnsFrom": ["list_id"],
 					"columnsTo": ["id"],
-					"onDelete": "no action",
+					"onDelete": "cascade",
 					"onUpdate": "no action"
 				}
 			},
@@ -212,7 +236,7 @@
 					"tableTo": "lists",
 					"columnsFrom": ["list_id"],
 					"columnsTo": ["id"],
-					"onDelete": "no action",
+					"onDelete": "cascade",
 					"onUpdate": "no action"
 				},
 				"list_shares_shared_with_id_users_id_fk": {

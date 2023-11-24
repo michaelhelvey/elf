@@ -1,9 +1,7 @@
 import { MyList } from '@/lib/crud.server'
-import { Separator } from '@radix-ui/react-dropdown-menu'
 import { RowsIcon } from '@radix-ui/react-icons'
-import { useCallback, useState } from 'react'
+import { NewListForm } from './list-form'
 import { MyListEntry } from './my-list-entry'
-import { NewListForm } from './new-list-form'
 import { Button } from './ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
 import {
@@ -14,15 +12,13 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from './ui/dialog'
+import { Separator } from './ui/separator'
 
 interface MyListsProps {
 	lists: MyList[]
 }
 
 export function MyLists({ lists }: MyListsProps) {
-	const [isDialogOpen, setIsDialogOpen] = useState(false)
-	const closeDialog = useCallback(() => setIsDialogOpen(false), [])
-
 	return (
 		<Card className='w-full max-w-md'>
 			<CardHeader>
@@ -42,7 +38,7 @@ export function MyLists({ lists }: MyListsProps) {
 				{lists.map(list => (
 					<MyListEntry list={list} key={list.id} />
 				))}
-				<Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+				<Dialog>
 					<DialogTrigger asChild>
 						<Button variant='default' className='mt-3 w-full'>
 							Create a new list
@@ -55,7 +51,7 @@ export function MyLists({ lists }: MyListsProps) {
 								Create a new list that you can share with others via a link
 							</DialogDescription>
 						</DialogHeader>
-						<NewListForm onSubmit={closeDialog} />
+						<NewListForm />
 					</DialogContent>
 				</Dialog>
 			</CardContent>

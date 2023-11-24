@@ -51,8 +51,7 @@ export function MyListEntry({ list: { id, name, description } }: { list: MyList 
 				<p className='text-sm font-medium leading-none'>{name}</p>
 				<p className='text-sm text-muted-foreground'>{description}</p>
 			</Link>
-			<fetcher.Form method='DELETE'>
-				<input type='hidden' name='action' value={'delete_list'} />
+			<fetcher.Form method='DELETE' action={`/lists/${id}`}>
 				<input type='hidden' name='listId' value={id} />
 				<Button
 					type='submit'

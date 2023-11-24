@@ -1,8 +1,8 @@
 import { SharedList } from '@/lib/crud.server'
 import { Avatar, AvatarFallback, AvatarImage } from '@radix-ui/react-avatar'
-import { Separator } from '@radix-ui/react-dropdown-menu'
 import { Share1Icon } from '@radix-ui/react-icons'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './ui/card'
+import { Separator } from './ui/separator'
 
 interface SharedListsProps {
 	lists: SharedList[]

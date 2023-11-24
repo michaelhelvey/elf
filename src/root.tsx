@@ -12,8 +12,8 @@ import {
 } from '@remix-run/react'
 import clsx from 'clsx'
 import { AppLayout } from './components/layout'
+import { ssrReadColorTheme } from './components/ui/utils'
 import stylesheet from './globals.css'
-import { ssrReadColorTheme } from './lib/utils'
 
 export const links: LinksFunction = () => [
 	{

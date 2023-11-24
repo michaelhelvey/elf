@@ -5,7 +5,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { setColorTheme } from '@/lib/utils'
+import { setColorTheme } from '@/components/ui/utils'
 import { SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import { MoonIcon } from '@radix-ui/react-icons'
 import { Link } from '@remix-run/react'
@@ -16,7 +16,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 			<header className='p-4 flex justify-between container'>
 				<Link to='/'>
 					<img
-						src='elf.png'
+						src='/elf.png'
 						alt='Elf logo'
 						className='h-12 w-12 border border-muted rounded-full shadow-sm hover:scale-110 transition-transform ease-in-out duration-150'
 					/>

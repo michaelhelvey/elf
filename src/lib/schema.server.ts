@@ -16,6 +16,7 @@ export const lists = pgTable('lists', {
 		.references(() => users.id)
 		.notNull(),
 	name: text('name').notNull(),
+	description: text('description').notNull(),
 	created_at: date('created_at').defaultNow().notNull(),
 	updated_at: date('updated_at').defaultNow().notNull(),
 })
@@ -24,6 +25,7 @@ export const listItems = pgTable('list_items', {
 	id: serial('id').primaryKey(),
 	list_id: integer('list_id').references(() => lists.id),
 	name: text('name').notNull(),
+	description: text('description').notNull(),
 	purchased: boolean('purchased').default(false),
 	created_at: date('created_at').defaultNow().notNull(),
 	updated_at: date('updated_at').defaultNow().notNull(),

@@ -8,6 +8,20 @@
 			"when": 1700669663731,
 			"tag": "0000_wealthy_shooting_star",
 			"breakpoints": true
+		},
+		{
+			"idx": 1,
+			"version": "5",
+			"when": 1700676596044,
+			"tag": "0001_previous_cloak",
+			"breakpoints": true
+		},
+		{
+			"idx": 2,
+			"version": "5",
+			"when": 1700676630816,
+			"tag": "0002_small_the_renegades",
+			"breakpoints": true
 		}
 	]
 }

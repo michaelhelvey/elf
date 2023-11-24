@@ -7,8 +7,8 @@ import {
 } from '@/components/ui/dropdown-menu'
 import { setColorTheme } from '@/lib/utils'
 import { SignedIn, SignedOut, UserButton } from '@clerk/remix'
+import { MoonIcon } from '@radix-ui/react-icons'
 import { Link } from '@remix-run/react'
-import { MoonStar } from 'lucide-react'
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
 	return (
@@ -51,7 +51,7 @@ function AppearanceToggle() {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger className='hover:bg-accent p-3 rounded'>
-				<MoonStar size={16} />
+				<MoonIcon height={16} width={16} />
 			</DropdownMenuTrigger>
 			<DropdownMenuContent align='end'>
 				<DropdownMenuItem onSelect={updateTheme('light')}>Light</DropdownMenuItem>

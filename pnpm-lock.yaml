@@ -14,9 +14,21 @@ dependencies:
     '@isaacs/express-prometheus-middleware':
         specifier: ^1.2.1
         version: 1.2.1(express@4.18.2)(prom-client@13.2.0)
+    '@radix-ui/react-avatar':
+        specifier: ^1.0.4
+        version: 1.0.4(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+    '@radix-ui/react-dialog':
+        specifier: ^1.0.5
+        version: 1.0.5(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
     '@radix-ui/react-dropdown-menu':
         specifier: ^2.0.6
         version: 2.0.6(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+    '@radix-ui/react-icons':
+        specifier: ^1.3.0
+        version: 1.3.0(react@18.2.0)
+    '@radix-ui/react-separator':
+        specifier: ^1.0.3
+        version: 1.0.3(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
     '@radix-ui/react-slot':
         specifier: ^1.0.2
         version: 1.0.2(@types/react@18.2.37)(react@18.2.0)
@@ -32,6 +44,9 @@ dependencies:
     '@remix-run/serve':
         specifier: ^2.3.0
         version: 2.3.0(typescript@5.2.2)
+    '@remix-validated-form/with-zod':
+        specifier: ^2.0.7
+        version: 2.0.7(remix-validated-form@5.1.5)(zod@3.22.4)
     class-variance-authority:
         specifier: ^0.7.0
         version: 0.7.0
@@ -62,9 +77,6 @@ dependencies:
     js-cookie:
         specifier: ^3.0.5
         version: 3.0.5
-    lucide-react:
-        specifier: ^0.292.0
-        version: 0.292.0(react@18.2.0)
     morgan:
         specifier: ^1.10.0
         version: 1.10.0
@@ -80,6 +92,9 @@ dependencies:
     react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+    remix-validated-form:
+        specifier: ^5.1.5
+        version: 5.1.5(@remix-run/node@2.3.0)(@remix-run/react@2.3.0)(@remix-run/server-runtime@2.3.0)(@types/react@18.2.37)(react@18.2.0)
     source-map-support:
         specifier: ^0.5.21
         version: 0.5.21
@@ -101,6 +116,9 @@ dependencies:
     zod:
         specifier: ^3.22.4
         version: 3.22.4
+    zod-form-data:
+        specifier: ^2.0.2
+        version: 2.0.2(zod@3.22.4)
 
 devDependencies:
     '@michaelhelvey/eslint-config':
@@ -2518,6 +2536,33 @@ packages:
             react-dom: 18.2.0(react@18.2.0)
         dev: false
 
+    /@radix-ui/react-avatar@1.0.4(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-kVK2K7ZD3wwj3qhle0ElXhOjbezIgyl2hVvgwfIdexL3rN6zJmy5AqqIf+D31lxVppdzV8CjAfZ6PklkmInZLw==,
+            }
+        peerDependencies:
+            '@types/react': '*'
+            '@types/react-dom': '*'
+            react: ^16.8 || ^17.0 || ^18.0
+            react-dom: ^16.8 || ^17.0 || ^18.0
+        peerDependenciesMeta:
+            '@types/react':
+                optional: true
+            '@types/react-dom':
+                optional: true
+        dependencies:
+            '@babel/runtime': 7.23.2
+            '@radix-ui/react-context': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@radix-ui/react-use-layout-effect': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@types/react': 18.2.37
+            '@types/react-dom': 18.2.15
+            react: 18.2.0
+            react-dom: 18.2.0(react@18.2.0)
+        dev: false
+
     /@radix-ui/react-collection@1.0.3(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0):
         resolution:
             {
@@ -2577,6 +2622,43 @@ packages:
             '@babel/runtime': 7.23.2
             '@types/react': 18.2.37
             react: 18.2.0
+        dev: false
+
+    /@radix-ui/react-dialog@1.0.5(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-GjWJX/AUpB703eEBanuBnIWdIXg6NvJFCXcNlSZk4xdszCdhrJgBoUd1cGk67vFO+WdA2pfI/plOpqz/5GUP6Q==,
+            }
+        peerDependencies:
+            '@types/react': '*'
+            '@types/react-dom': '*'
+            react: ^16.8 || ^17.0 || ^18.0
+            react-dom: ^16.8 || ^17.0 || ^18.0
+        peerDependenciesMeta:
+            '@types/react':
+                optional: true
+            '@types/react-dom':
+                optional: true
+        dependencies:
+            '@babel/runtime': 7.23.2
+            '@radix-ui/primitive': 1.0.1
+            '@radix-ui/react-compose-refs': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@radix-ui/react-context': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@radix-ui/react-dismissable-layer': 1.0.5(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-focus-guards': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@radix-ui/react-focus-scope': 1.0.4(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-id': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@radix-ui/react-portal': 1.0.4(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-presence': 1.0.1(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
+            '@radix-ui/react-slot': 1.0.2(@types/react@18.2.37)(react@18.2.0)
+            '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@types/react': 18.2.37
+            '@types/react-dom': 18.2.15
+            aria-hidden: 1.2.3
+            react: 18.2.0
+            react-dom: 18.2.0(react@18.2.0)
+            react-remove-scroll: 2.5.5(@types/react@18.2.37)(react@18.2.0)
         dev: false
 
     /@radix-ui/react-direction@1.0.1(@types/react@18.2.37)(react@18.2.0):
@@ -2695,6 +2777,17 @@ packages:
             '@types/react-dom': 18.2.15
             react: 18.2.0
             react-dom: 18.2.0(react@18.2.0)
+        dev: false
+
+    /@radix-ui/react-icons@1.3.0(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-jQxj/0LKgp+j9BiTXz3O3sgs26RNet2iLWmsPyRz2SIcR4q/4SbazXfnYwbAr+vLYKSfc7qxzyGQA1HLlYiuNw==,
+            }
+        peerDependencies:
+            react: ^16.x || ^17.x || ^18.x
+        dependencies:
+            react: 18.2.0
         dev: false
 
     /@radix-ui/react-id@1.0.1(@types/react@18.2.37)(react@18.2.0):
@@ -2888,6 +2981,30 @@ packages:
             '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
             '@radix-ui/react-use-callback-ref': 1.0.1(@types/react@18.2.37)(react@18.2.0)
             '@radix-ui/react-use-controllable-state': 1.0.1(@types/react@18.2.37)(react@18.2.0)
+            '@types/react': 18.2.37
+            '@types/react-dom': 18.2.15
+            react: 18.2.0
+            react-dom: 18.2.0(react@18.2.0)
+        dev: false
+
+    /@radix-ui/react-separator@1.0.3(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-itYmTy/kokS21aiV5+Z56MZB54KrhPgn6eHDKkFeOLR34HMN2s8PaN47qZZAGnvupcjxHaFZnW4pQEh0BvvVuw==,
+            }
+        peerDependencies:
+            '@types/react': '*'
+            '@types/react-dom': '*'
+            react: ^16.8 || ^17.0 || ^18.0
+            react-dom: ^16.8 || ^17.0 || ^18.0
+        peerDependenciesMeta:
+            '@types/react':
+                optional: true
+            '@types/react-dom':
+                optional: true
+        dependencies:
+            '@babel/runtime': 7.23.2
+            '@radix-ui/react-primitive': 1.0.3(@types/react-dom@18.2.15)(@types/react@18.2.37)(react-dom@18.2.0)(react@18.2.0)
             '@types/react': 18.2.37
             '@types/react-dom': 18.2.15
             react: 18.2.0
@@ -3324,6 +3441,19 @@ packages:
             }
         dependencies:
             web-streams-polyfill: 3.2.1
+
+    /@remix-validated-form/with-zod@2.0.7(remix-validated-form@5.1.5)(zod@3.22.4):
+        resolution:
+            {
+                integrity: sha512-iytcQ9qlg3VRV9CXh33vTPnJcDdxmMPE6vZJj9oFh4Wf4kpQ2ck6s1jFOrpJxiwYRQrtlIzuR+JaWOa8pXwnfw==,
+            }
+        peerDependencies:
+            remix-validated-form: ^4.x || ^5.x
+            zod: '>= 3.11.0'
+        dependencies:
+            remix-validated-form: 5.1.5(@remix-run/node@2.3.0)(@remix-run/react@2.3.0)(@remix-run/server-runtime@2.3.0)(@types/react@18.2.37)(react@18.2.0)
+            zod: 3.22.4
+        dev: false
 
     /@rollup/rollup-android-arm-eabi@4.5.0:
         resolution:
@@ -8025,6 +8155,13 @@ packages:
         engines: { node: '>= 4' }
         dev: true
 
+    /immer@9.0.21:
+        resolution:
+            {
+                integrity: sha512-bc4NBHqOqSfRW7POMkHd51LvClaeMXpm8dx0e8oE2GORbq5aRK7Bxl4FyzVLdGtLmvLKL7BTDBG5ACQm4HWjTA==,
+            }
+        dev: false
+
     /import-fresh@3.3.0:
         resolution:
             {
@@ -8864,6 +9001,13 @@ packages:
             }
         dev: true
 
+    /lodash.get@4.4.2:
+        resolution:
+            {
+                integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==,
+            }
+        dev: false
+
     /lodash.merge@4.6.2:
         resolution:
             {
@@ -8997,17 +9141,6 @@ packages:
         dependencies:
             es5-ext: 0.10.62
         dev: true
-
-    /lucide-react@0.292.0(react@18.2.0):
-        resolution:
-            {
-                integrity: sha512-rRgUkpEHWpa5VCT66YscInCQmQuPCB1RFRzkkxMxg4b+jaL0V12E3riWWR2Sh5OIiUhCwGW/ZExuEO4Az32E6Q==,
-            }
-        peerDependencies:
-            react: ^16.5.1 || ^17.0.0 || ^18.0.0
-        dependencies:
-            react: 18.2.0
-        dev: false
 
     /lz-string@1.5.0:
         resolution:
@@ -9963,6 +10096,15 @@ packages:
             any-promise: 1.3.0
             object-assign: 4.1.1
             thenify-all: 1.6.0
+
+    /nanoid@3.3.6:
+        resolution:
+            {
+                integrity: sha512-BGcqMMJuToF7i1rt+2PWSNVnWIkGCU78jBG3RxO/bZlnZPK2Cmi2QaffxGO/2RvWi9sL+FAiRiXMgsyxQ1DIDA==,
+            }
+        engines: { node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1 }
+        hasBin: true
+        dev: false
 
     /nanoid@3.3.7:
         resolution:
@@ -11438,6 +11580,38 @@ packages:
             mdast-util-to-hast: 12.3.0
             unified: 10.1.2
         dev: true
+
+    /remeda@1.29.0:
+        resolution:
+            {
+                integrity: sha512-M3LQ14KtMdQ1879lj/kKji3zBk158s7Rwg963mEkTfQFMxnKrIEAMxJfo/+0sp/+uGgN/KMVU2MBA4LNjqf8YQ==,
+            }
+        dev: false
+
+    /remix-validated-form@5.1.5(@remix-run/node@2.3.0)(@remix-run/react@2.3.0)(@remix-run/server-runtime@2.3.0)(@types/react@18.2.37)(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-v27JGzhOMGREyvPIDAgjhywfVYahe3CC4EXGIzJbwZfXnq7GFju5f/yNmyUyQLeYcOmU6uhzq+vwDJDOiXjvBA==,
+            }
+        peerDependencies:
+            '@remix-run/node': '>= 1.16.1'
+            '@remix-run/react': '>= 1.15.0'
+            '@remix-run/server-runtime': '>= 1.16.1'
+            react: ^17.0.2 || ^18.0.0
+        dependencies:
+            '@remix-run/node': 2.3.0(typescript@5.2.2)
+            '@remix-run/react': 2.3.0(react-dom@18.2.0)(react@18.2.0)(typescript@5.2.2)
+            '@remix-run/server-runtime': 2.3.0(typescript@5.2.2)
+            immer: 9.0.21
+            lodash.get: 4.4.2
+            nanoid: 3.3.6
+            react: 18.2.0
+            remeda: 1.29.0
+            tiny-invariant: 1.3.1
+            zustand: 4.4.6(@types/react@18.2.37)(immer@9.0.21)(react@18.2.0)
+        transitivePeerDependencies:
+            - '@types/react'
+        dev: false
 
     /require-like@0.1.2:
         resolution:
@@ -13793,11 +13967,46 @@ packages:
             stacktracey: 2.1.8
         dev: true
 
+    /zod-form-data@2.0.2(zod@3.22.4):
+        resolution:
+            {
+                integrity: sha512-sKTi+k0fvkxdakD0V5rq+9WVJA3cuTQUfEmNqvHrTzPLvjfLmkkBLfR0ed3qOi9MScJXTHIDH/jUNnEJ3CBX4g==,
+            }
+        peerDependencies:
+            zod: '>= 3.11.0'
+        dependencies:
+            zod: 3.22.4
+        dev: false
+
     /zod@3.22.4:
         resolution:
             {
                 integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==,
             }
+
+    /zustand@4.4.6(@types/react@18.2.37)(immer@9.0.21)(react@18.2.0):
+        resolution:
+            {
+                integrity: sha512-Rb16eW55gqL4W2XZpJh0fnrATxYEG3Apl2gfHTyDSE965x/zxslTikpNch0JgNjJA9zK6gEFW8Fl6d1rTZaqgg==,
+            }
+        engines: { node: '>=12.7.0' }
+        peerDependencies:
+            '@types/react': '>=16.8'
+            immer: '>=9.0'
+            react: '>=16.8'
+        peerDependenciesMeta:
+            '@types/react':
+                optional: true
+            immer:
+                optional: true
+            react:
+                optional: true
+        dependencies:
+            '@types/react': 18.2.37
+            immer: 9.0.21
+            react: 18.2.0
+            use-sync-external-store: 1.2.0(react@18.2.0)
+        dev: false
 
     /zwitch@2.0.4:
         resolution:

@@ -1,3 +1,5 @@
+import { getAuth } from '@clerk/remix/ssr.server'
+import { ActionFunctionArgs, redirect } from '@remix-run/node'
 import { clsx, type ClassValue } from 'clsx'
 import Cookie from 'js-cookie'
 import { twMerge } from 'tailwind-merge'
@@ -31,3 +33,14 @@ export function ssrReadColorTheme(cookieHeader: string | null) {
 		}
 	}
 }
+
+export async function dataFunctionAuthGuard(args: ActionFunctionArgs) {
+	const { userId } = await getAuth(args)
+	if (!userId) {
+		throw redirect('/signin')
+	}
+
+	return userId
+}
+
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))

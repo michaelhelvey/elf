@@ -2,16 +2,13 @@ import { MyLists } from '@/components/home-my-lists'
 import { SharedLists } from '@/components/home-shared-lists'
 import { LandingPage } from '@/components/landing-page'
 import { getListsForUser, getListsSharedWithUser } from '@/lib/crud.server'
+import { dataFunctionAuthGuard } from '@/lib/utils'
 import { SignedIn } from '@clerk/remix'
-import { getAuth } from '@clerk/remix/ssr.server'
-import { LoaderFunctionArgs, redirect } from '@remix-run/node'
+import { LoaderFunctionArgs } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
 export const loader = async (args: LoaderFunctionArgs) => {
-	const { userId } = await getAuth(args)
-	if (!userId) {
-		return redirect('/signin')
-	}
+	const userId = await dataFunctionAuthGuard(args)
 
 	const myLists = await getListsForUser(userId)
 	const sharedLists = await getListsSharedWithUser(userId)
@@ -36,7 +33,7 @@ function DashboardPage() {
 
 	return (
 		<SignedIn>
-			<section className='flex-1 flex flex-col items-center justify-center p-6 gap-4'>
+			<section className='flex-1 flex flex-col items-center justify-center p-2 gap-4'>
 				<MyLists lists={myLists} />
 				<SharedLists lists={sharedLists} />
 			</section>

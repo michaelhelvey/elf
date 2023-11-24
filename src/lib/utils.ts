@@ -37,7 +37,7 @@ export function ssrReadColorTheme(cookieHeader: string | null) {
 export async function dataFunctionAuthGuard(args: ActionFunctionArgs) {
 	const { userId } = await getAuth(args)
 	if (!userId) {
-		throw redirect('/signin')
+		throw redirect('/login?redirect_url=' + encodeURIComponent(args.request.url))
 	}
 
 	return userId

@@ -5,7 +5,7 @@ import {
 	DropdownMenuItem,
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import { setColorTheme } from '@/components/ui/utils'
+import { setColorTheme } from '@/lib/utils'
 import { SignedIn, SignedOut, UserButton } from '@clerk/remix'
 import { MoonIcon } from '@radix-ui/react-icons'
 import { Link } from '@remix-run/react'

@@ -15,8 +15,9 @@ import {
 import clsx from 'clsx'
 import Cookies from 'js-cookie'
 import { AppLayout } from './components/layout'
-import { ssrReadColorTheme } from './components/ui/utils'
+import { Toaster } from './components/ui/toaster'
 import stylesheet from './globals.css'
+import { ssrReadColorTheme } from './lib/utils'
 
 export const links: LinksFunction = () => [
 	{
@@ -72,6 +73,7 @@ const AppShell = ({
 				<ScrollRestoration />
 				<Scripts />
 				<LiveReload />
+				<Toaster />
 			</body>
 		</html>
 	)

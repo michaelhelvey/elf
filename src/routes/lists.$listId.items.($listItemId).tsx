@@ -1,7 +1,7 @@
 import { handleUpdateOrCreateListItem } from '@/components/list-item-form'
-import { dataFunctionAuthGuard } from '@/components/ui/utils'
 import { deletelistItem, getListById, getlistItemById } from '@/lib/crud.server'
 import { logger } from '@/lib/logger.server'
+import { dataFunctionAuthGuard } from '@/lib/utils'
 import { ActionFunctionArgs, redirect } from '@remix-run/node'
 import { ok } from 'assert'
 

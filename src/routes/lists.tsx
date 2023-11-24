@@ -1,5 +1,5 @@
 import { handleNewListCreateOrUpdate } from '@/components/list-form'
-import { dataFunctionAuthGuard } from '@/components/ui/utils'
+import { dataFunctionAuthGuard } from '@/lib/utils'
 import { ActionFunctionArgs } from '@remix-run/node'
 
 export const action = async (args: ActionFunctionArgs) => {

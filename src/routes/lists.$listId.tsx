@@ -15,8 +15,9 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { dataFunctionAuthGuard } from '@/components/ui/utils'
-import { deleteList, getItemsForList, getListById } from '@/lib/crud.server'
+import { useToast } from '@/components/ui/use-toast'
+import { deleteList, getItemsForList, getListById, isListSharedWithUser } from '@/lib/crud.server'
+import { dataFunctionAuthGuard } from '@/lib/utils'
 import { DotsHorizontalIcon } from '@radix-ui/react-icons'
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
@@ -31,6 +32,10 @@ export const loader = async (args: LoaderFunctionArgs) => {
 
 	const list = await getListById(parseInt(listId))
 	const listItems = await getItemsForList(parseInt(listId))
+
+	if (userId !== list.owner_id && !(await isListSharedWithUser(list.id, userId))) {
+		throw new Response('Forbidden', { status: 403 })
+	}
 
 	return {
 		list,
@@ -73,13 +78,37 @@ export const action = async (args: ActionFunctionArgs) => {
 export default function ListDetailPage() {
 	const { list, listItems, userId } = useLoaderData<typeof loader>()
 	const [editDialogOpen, setEditDialogOpen] = useState(false)
+	const { toast } = useToast()
 
 	if (list.owner_id !== userId) {
 		return <div>Share view lol isnt it great</div>
 	}
 
+	const generateShareLink = async () => {
+		try {
+			const response = await fetch(`/shares/${list.id}/new`, { method: 'POST' })
+			if (!response.ok) {
+				throw new Error(response.statusText)
+			}
+
+			const { shareURL } = (await response.json()) as { shareURL: string }
+			await navigator.clipboard.writeText(shareURL)
+
+			toast({
+				title: 'Copied to clipboard',
+				description:
+					'Paste it somewhere and let others know about it! The link is valid for 24 hours.',
+			})
+		} catch (e) {
+			const message = 'Failed to copy share link'
+			const description = e instanceof Error ? e.message : String(e)
+
+			toast({ title: message, description })
+		}
+	}
+
 	return (
-		<div className='flex flex-col items-center justify-center flex-1'>
+		<div className='flex flex-col items-center justify-center flex-1 p-2'>
 			<Card className='w-full max-w-lg'>
 				<div className='flex items-center justify-between w-full'>
 					<CardHeader>
@@ -94,6 +123,9 @@ export default function ListDetailPage() {
 							<DropdownMenuContent align='end'>
 								<DropdownMenuItem onSelect={() => setEditDialogOpen(true)}>
 									Edit List
+								</DropdownMenuItem>
+								<DropdownMenuItem onSelect={() => void generateShareLink()}>
+									Copy Share Link
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>

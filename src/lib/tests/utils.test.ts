@@ -1,4 +1,4 @@
-import { ssrReadColorTheme } from '../../components/ui/utils'
+import { ssrReadColorTheme } from '../utils'
 
 describe('ssrReadColorTheme', () => {
 	it('returns undefined if cookieHeader is null', () => {

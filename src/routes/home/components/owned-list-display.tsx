@@ -1,43 +1,16 @@
-import { MyList, deleteList, getListById } from '@/lib/crud.server'
-import { logger } from '@/lib/logger.server'
+import { Spinner } from '@/components/spinner'
+import { Button } from '@/components/ui/button'
+import { OwnedList } from '@/lib/crud.server'
 import { TrashIcon } from '@radix-ui/react-icons'
+import { SerializeFrom } from '@remix-run/node'
 import { Link, useFetcher } from '@remix-run/react'
 import clsx from 'clsx'
-import { z } from 'zod'
-import { zfd } from 'zod-form-data'
-import { Spinner } from './spinner'
-import { Button } from './ui/button'
 
-const deleteListSchema = zfd.formData({
-	listId: zfd.numeric(z.coerce.number()),
-})
-
-export async function handleDeleteListRequest(userId: string, formData: FormData) {
-	const form = deleteListSchema.safeParse(formData)
-
-	if (!form.success) {
-		logger.error({ msg: 'invalid form data', data: form })
-		throw new Response('invalid delete list request', {
-			status: 400,
-		})
-	}
-
-	const listId = form.data.listId
-	const list = await getListById(listId)
-
-	if (list.owner_id !== userId) {
-		logger.error({ msg: 'user does not own list', listId, userId })
-		throw new Response('You do not have permission to delete this list', {
-			status: 403,
-		})
-	}
-
-	await deleteList(listId)
-
-	return null
-}
-
-export function MyListEntry({ list: { id, name, description } }: { list: MyList }) {
+export function OwnedListDisplay({
+	list: { id, name, description },
+}: {
+	list: SerializeFrom<OwnedList>
+}) {
 	const fetcher = useFetcher()
 
 	return (

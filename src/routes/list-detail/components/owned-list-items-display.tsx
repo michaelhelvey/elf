@@ -1,11 +1,5 @@
-import { ListById, ListItem } from '@/lib/crud.server'
-import { PlusIcon, RowsIcon, TrashIcon } from '@radix-ui/react-icons'
-import { useFetcher } from '@remix-run/react'
-import clsx from 'clsx'
-import { useState } from 'react'
-import { ListItemForm } from './list-item-form'
-import { Spinner } from './spinner'
-import { Button } from './ui/button'
+import { Spinner } from '@/components/spinner'
+import { Button } from '@/components/ui/button'
 import {
 	Dialog,
 	DialogContent,
@@ -13,15 +7,21 @@ import {
 	DialogHeader,
 	DialogTitle,
 	DialogTrigger,
-} from './ui/dialog'
-import { Separator } from './ui/separator'
+} from '@/components/ui/dialog'
+import { Separator } from '@/components/ui/separator'
+import { ListById, ListItem } from '@/lib/crud.server'
+import { PlusIcon, RowsIcon, TrashIcon } from '@radix-ui/react-icons'
+import { useFetcher } from '@remix-run/react'
+import clsx from 'clsx'
+import { useState } from 'react'
+import { ListItemForm } from './list-item-form'
 
-type ListItemsOwnerViewProps = {
+type OwnedListItemsDisplayProps = {
 	listItems: ListItem[]
 	list: ListById
 }
 
-export function ListItemsOwnerView({ list, listItems }: ListItemsOwnerViewProps) {
+export function OwnedListItemsDisplay({ list, listItems }: OwnedListItemsDisplayProps) {
 	const [editDialogOpen, setEditDialogOpen] = useState(false)
 
 	return (

@@ -1,4 +1,4 @@
-import { boolean, date, integer, pgTable, serial, text } from 'drizzle-orm/pg-core'
+import { boolean, integer, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
 	id: text('id').primaryKey(),
@@ -6,8 +6,8 @@ export const users = pgTable('users', {
 	last_name: text('last_name'),
 	email: text('email').unique().notNull(),
 	avatar_url: text('avatar_url'),
-	created_at: date('created_at').defaultNow().notNull(),
-	updated_at: date('updated_at').defaultNow().notNull(),
+	created_at: timestamp('created_at').defaultNow().notNull(),
+	updated_at: timestamp('updated_at').defaultNow().notNull(),
 })
 
 export const lists = pgTable('lists', {
@@ -17,8 +17,8 @@ export const lists = pgTable('lists', {
 		.notNull(),
 	name: text('name').notNull(),
 	description: text('description').notNull(),
-	created_at: date('created_at').defaultNow().notNull(),
-	updated_at: date('updated_at').defaultNow().notNull(),
+	created_at: timestamp('created_at').defaultNow().notNull(),
+	updated_at: timestamp('updated_at').defaultNow().notNull(),
 })
 
 export const listItems = pgTable('list_items', {
@@ -29,8 +29,8 @@ export const listItems = pgTable('list_items', {
 	link: text('link'),
 	og_image_url: text('og_image_url'),
 	purchased: boolean('purchased').default(false),
-	created_at: date('created_at').defaultNow().notNull(),
-	updated_at: date('updated_at').defaultNow().notNull(),
+	created_at: timestamp('created_at').defaultNow().notNull(),
+	updated_at: timestamp('updated_at').defaultNow().notNull(),
 })
 
 export const shares = pgTable('list_shares', {
@@ -41,8 +41,8 @@ export const shares = pgTable('list_shares', {
 	shared_with_id: text('shared_with_id')
 		.references(() => users.id)
 		.notNull(),
-	created_at: date('created_at').defaultNow().notNull(),
-	updated_at: date('updated_at').defaultNow().notNull(),
+	created_at: timestamp('created_at').defaultNow().notNull(),
+	updated_at: timestamp('updated_at').defaultNow().notNull(),
 })
 
 export const shareTokens = pgTable('share_tokens', {
@@ -50,7 +50,7 @@ export const shareTokens = pgTable('share_tokens', {
 	list_id: integer('list_id')
 		.references(() => lists.id, { onDelete: 'cascade' })
 		.notNull(),
-	expires_at: date('expires_at').notNull(),
-	created_at: date('created_at').defaultNow().notNull(),
-	updated_at: date('updated_at').defaultNow().notNull(),
+	expires_at: timestamp('expires_at').notNull(),
+	created_at: timestamp('created_at').defaultNow().notNull(),
+	updated_at: timestamp('updated_at').defaultNow().notNull(),
 })

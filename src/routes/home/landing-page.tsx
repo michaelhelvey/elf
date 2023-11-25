@@ -1,6 +1,6 @@
 import { SignedOut } from '@clerk/remix'
 import { Link } from '@remix-run/react'
-import { Button } from './ui/button'
+import { Button } from '../../components/ui/button'
 
 export function LandingPage() {
 	return (

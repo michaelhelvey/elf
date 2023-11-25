@@ -2,13 +2,16 @@ import { createShareToken, getListById } from '@/lib/crud.server'
 import { dataFunctionAuthGuard } from '@/lib/utils'
 import { ActionFunctionArgs } from '@remix-run/node'
 
+/**
+ * /lists/:listId/shares/create API endpoint
+ */
 export const action = async (args: ActionFunctionArgs) => {
 	const userId = await dataFunctionAuthGuard(args)
 
 	const listId = parseInt(args.params.listId as string)
 	const list = await getListById(listId)
 
-	if (list.owner_id !== userId) {
+	if (list.owner.id !== userId) {
 		return new Response('Forbidden', { status: 403 })
 	}
 

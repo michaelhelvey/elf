@@ -21,7 +21,7 @@ export async function getListsForUser(userId: string) {
 	return await db.select().from(lists).where(eq(lists.owner_id, userId))
 }
 
-export type MyList = Awaited<ReturnType<typeof getListsForUser>>[0]
+export type OwnedList = Awaited<ReturnType<typeof getListsForUser>>[0]
 
 export async function getListsSharedWithUser(userId: string) {
 	return await db
@@ -53,7 +53,24 @@ export async function deleteList(id: number) {
 export type ListById = Awaited<ReturnType<typeof getListById>>
 
 export async function getListById(id: number) {
-	const data = await db.select().from(lists).where(eq(lists.id, id))
+	const data = await db
+		.select({
+			id: lists.id,
+			name: lists.name,
+			description: lists.description,
+			owner: {
+				id: users.id,
+				first_name: users.first_name,
+				last_name: users.last_name,
+				email: users.email,
+				avatar_url: users.avatar_url,
+			},
+		})
+		.from(lists)
+		.innerJoin(users, eq(lists.owner_id, users.id))
+		.where(eq(lists.id, id))
+		.limit(1)
+
 	if (!data.length) {
 		throw new Error(`No list found for id: ${id}`)
 	}
@@ -70,7 +87,10 @@ export async function updateList(
 	listId: number,
 	input: Omit<Partial<typeof lists.$inferInsert>, 'id'>
 ) {
-	return await db.update(lists).set(input).where(eq(lists.id, listId))
+	return await db
+		.update(lists)
+		.set({ ...input, updated_at: new Date() })
+		.where(eq(lists.id, listId))
 }
 
 export type ListItem = Awaited<ReturnType<typeof getItemsForList>>[0]
@@ -99,7 +119,10 @@ export async function updateListItem(
 	itemId: number,
 	input: Omit<Partial<typeof listItems.$inferInsert>, 'id'>
 ) {
-	return await db.update(listItems).set(input).where(eq(listItems.id, itemId))
+	return await db
+		.update(listItems)
+		.set({ ...input, updated_at: new Date() })
+		.where(eq(listItems.id, itemId))
 }
 
 export async function createListItem(listId: number, input: typeof listItems.$inferInsert) {
@@ -121,7 +144,7 @@ export async function createShareToken(listId: number) {
 		.insert(shareTokens)
 		.values({
 			list_id: listId,
-			expires_at: expiresAt.toISOString(),
+			expires_at: expiresAt,
 			token: sql`gen_random_uuid()`,
 		})
 		.returning({ newToken: shareTokens.token })
@@ -149,7 +172,7 @@ export async function validateAndAssociateShareToken(userId: string, _token: str
 	}
 
 	const list = await getListById(token.list_id)
-	if (list.owner_id === userId) {
+	if (list.owner.id === userId) {
 		return { result: ShareTokenResult.SELF_SHARE }
 	}
 

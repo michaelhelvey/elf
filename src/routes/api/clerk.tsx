@@ -121,8 +121,8 @@ async function handlePayload(payload: z.infer<typeof webhookSchema>) {
 				last_name: payload.data.last_name,
 				email: primaryEmailAddr?.email_address,
 				avatar_url: payload.data.profile_image_url,
-				created_at: new Date().toISOString(),
-				updated_at: new Date().toISOString(),
+				created_at: new Date(),
+				updated_at: new Date(),
 			}
 
 			await db.insert(users).values(newUser)
@@ -134,7 +134,7 @@ async function handlePayload(payload: z.infer<typeof webhookSchema>) {
 				last_name: payload.data.last_name,
 				email: payload.data.email_addresses[0].email_address,
 				avatar_url: payload.data.profile_image_url,
-				updated_at: new Date().toISOString(),
+				updated_at: new Date(),
 			}
 
 			await db.update(users).set(updatedUser).where(eq(users.id, payload.data.id))

@@ -2,12 +2,14 @@ import { ShareTokenResult, validateAndAssociateShareToken } from '@/lib/crud.ser
 import { dataFunctionAuthGuard } from '@/lib/utils'
 import { LoaderFunctionArgs, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
-import { ok } from 'assert'
 
 export const loader = async (args: LoaderFunctionArgs) => {
 	const userId = await dataFunctionAuthGuard(args)
-	const token = args.params.token
-	ok(token, 'expected token route param')
+	const token = new URL(args.request.url).searchParams.get('token')
+
+	if (!token) {
+		throw new Response('Missing token', { status: 400 })
+	}
 
 	const { result, listId } = await validateAndAssociateShareToken(userId, token)
 

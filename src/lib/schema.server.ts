@@ -1,4 +1,4 @@
-import { boolean, integer, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
+import { integer, pgTable, serial, text, timestamp } from 'drizzle-orm/pg-core'
 
 export const users = pgTable('users', {
 	id: text('id').primaryKey(),
@@ -28,7 +28,7 @@ export const listItems = pgTable('list_items', {
 	description: text('description'),
 	link: text('link'),
 	og_image_url: text('og_image_url'),
-	purchased: boolean('purchased').default(false),
+	purchased_by: text('purchased_by').references(() => users.id),
 	created_at: timestamp('created_at').defaultNow().notNull(),
 	updated_at: timestamp('updated_at').defaultNow().notNull(),
 })

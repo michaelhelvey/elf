@@ -5,9 +5,9 @@ CREATE TABLE IF NOT EXISTS "list_items" (
 	"description" text,
 	"link" text,
 	"og_image_url" text,
-	"purchased" boolean DEFAULT false,
-	"created_at" date DEFAULT now() NOT NULL,
-	"updated_at" date DEFAULT now() NOT NULL
+	"purchased_by" text,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "lists" (
@@ -15,24 +15,24 @@ CREATE TABLE IF NOT EXISTS "lists" (
 	"owner_id" text NOT NULL,
 	"name" text NOT NULL,
 	"description" text NOT NULL,
-	"created_at" date DEFAULT now() NOT NULL,
-	"updated_at" date DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "share_tokens" (
 	"token" text PRIMARY KEY NOT NULL,
 	"list_id" integer NOT NULL,
-	"expires_at" date NOT NULL,
-	"created_at" date DEFAULT now() NOT NULL,
-	"updated_at" date DEFAULT now() NOT NULL
+	"expires_at" timestamp NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "list_shares" (
 	"id" serial PRIMARY KEY NOT NULL,
 	"list_id" integer NOT NULL,
 	"shared_with_id" text NOT NULL,
-	"created_at" date DEFAULT now() NOT NULL,
-	"updated_at" date DEFAULT now() NOT NULL
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL
 );
 --> statement-breakpoint
 CREATE TABLE IF NOT EXISTS "users" (
@@ -41,13 +41,19 @@ CREATE TABLE IF NOT EXISTS "users" (
 	"last_name" text,
 	"email" text NOT NULL,
 	"avatar_url" text,
-	"created_at" date DEFAULT now() NOT NULL,
-	"updated_at" date DEFAULT now() NOT NULL,
+	"created_at" timestamp DEFAULT now() NOT NULL,
+	"updated_at" timestamp DEFAULT now() NOT NULL,
 	CONSTRAINT "users_email_unique" UNIQUE("email")
 );
 --> statement-breakpoint
 DO $$ BEGIN
  ALTER TABLE "list_items" ADD CONSTRAINT "list_items_list_id_lists_id_fk" FOREIGN KEY ("list_id") REFERENCES "lists"("id") ON DELETE cascade ON UPDATE no action;
+EXCEPTION
+ WHEN duplicate_object THEN null;
+END $$;
+--> statement-breakpoint
+DO $$ BEGIN
+ ALTER TABLE "list_items" ADD CONSTRAINT "list_items_purchased_by_users_id_fk" FOREIGN KEY ("purchased_by") REFERENCES "users"("id") ON DELETE no action ON UPDATE no action;
 EXCEPTION
  WHEN duplicate_object THEN null;
 END $$;

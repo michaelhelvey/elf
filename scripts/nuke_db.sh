@@ -26,4 +26,6 @@ echo "Re-Migrating"
 pnpm db:makemigrations
 pnpm db:migrate
 
-psql -U postgres -h 'localhost' -p 5436 -c < ./scripts/create_clerk_user.sql
+echo "Creating clerk user"
+
+psql -U postgres -h 'localhost' -p 5436 < ./scripts/create_clerk_user.sql

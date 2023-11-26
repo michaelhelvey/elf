@@ -119,8 +119,15 @@ jobs:
             - name: Migrate Database
               run: pnpm db:migrate
 
+            - name: Seed database
+              run: ./scripts/seed_db.sh
+
             - name: Execute E2E Tests
               run: pnpm test:e2e
+              env:
+                  TEST_USER_PASSWORD: ${{ secrets.TEST_USER_PASSWORD }}
+                  CLERK_PUBLISHABLE_KEY: ${{ secrets.CLERK_PUBLISHABLE_KEY }}
+                  CLERK_SECRET_KEY: ${{ secrets.CLERK_SECRET_KEY }}
 
     deploy_prod:
         name: 🚀 Deploy to Production

@@ -1,3 +1,5 @@
+import { getAuth } from '@clerk/remix/ssr.server'
+import { ActionFunctionArgs, redirect } from '@remix-run/node'
 import { clsx, type ClassValue } from 'clsx'
 import Cookie from 'js-cookie'
 import { twMerge } from 'tailwind-merge'
@@ -30,4 +32,26 @@ export function ssrReadColorTheme(cookieHeader: string | null) {
 			return cookieHeader.slice(idx + 6)
 		}
 	}
+}
+
+export async function dataFunctionAuthGuard(args: ActionFunctionArgs) {
+	const { userId } = await getAuth(args)
+	if (!userId) {
+		throw redirect('/login?redirect_url=' + encodeURIComponent(args.request.url))
+	}
+
+	return userId
+}
+
+export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+interface UserWithInitials {
+	first_name?: string | null
+	last_name?: string | null
+}
+
+export function initials({ first_name, last_name }: UserWithInitials) {
+	const first = first_name?.trim()?.[0] || ''
+	const last = last_name?.trim()?.[0] || ''
+	return first + last
 }

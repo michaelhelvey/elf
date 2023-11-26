@@ -4,7 +4,7 @@ services:
     db:
         image: postgres:latest
         restart: always
-        container_name: goblincore_db
+        container_name: elf_db
         environment:
             POSTGRES_USER: postgres
             POSTGRES_PASSWORD: postgres

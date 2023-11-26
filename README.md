@@ -1,20 +1,10 @@
 <p align="center">
-  <a href="https://michaelhelvey.dev" target="blank"><img src="./public/goblincore_stack.png" width="200" alt="goblin coding in a dark cave" /></a>
+  <a href="https://michaelhelvey.dev" target="blank"><img src="./public/elf.png" width="200" alt="drunken elf receiving christmas lists from squirrels" /></a>
 </p>
 
-# remix-goblincore-stack
+# elf
 
-Personal [Remix](https://remix.run) stack for side-projects.
-
-**Stack**:
-
--   [drizzle orm](https://orm.drizzle.team/)
--   [fly.io postgres](https://fly.io/docs/postgres/)
--   [tailwindcss](https://tailwindcss.com/)
--   [shadcn/ui](https://ui.shadcn.com/)
--   [clerk](https://clerk.com)
-
-And other standard JS tooling.
+Christmas lists, or something.
 
 ## Getting Started
 
@@ -30,6 +20,7 @@ This will start a local development server at `http://localhost:3000`
 -   `pnpm run lint`
 -   `pnpm run format`
 -   `pnpm validate` (runs everything all at once)
+-   `./scripts/nuke_db.sh` (nuke the local database and start over)
 
 ### Deployment
 

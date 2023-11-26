@@ -1,6 +1,7 @@
 import { and, desc, eq, sql } from 'drizzle-orm'
 import { db } from './db.server'
 import { listItems, lists, shareTokens, shares, users } from './schema.server'
+import { ShareTokenResult } from './shared-types'
 
 export async function createUser(input: typeof users.$inferInsert) {
 	return await db.insert(users).values(input).returning({ insertedId: users.id })
@@ -170,15 +171,12 @@ export async function createShareToken(listId: number) {
 	return rows[0]
 }
 
-export enum ShareTokenResult {
-	TOKEN_EXPIRED = 'token_expired',
-	ALREADY_ACTIVATED = 'already_activated',
-	SELF_SHARE = 'cannot_share_with_list_owner',
-	NOT_FOUND = 'not_found',
-	SUCCESS = 'success',
-}
-
 export async function validateAndAssociateShareToken(userId: string, _token: string) {
+	const user = await db.select().from(users).where(eq(users.id, userId)).limit(1)
+	if (!user.length) {
+		return { result: ShareTokenResult.USER_NOT_FOUND }
+	}
+
 	const rows = await db.select().from(shareTokens).where(eq(shareTokens.token, _token)).limit(1)
 	const token = rows[0]
 

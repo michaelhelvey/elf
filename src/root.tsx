@@ -29,7 +29,7 @@ export const links: LinksFunction = () => [
 
 export const meta: MetaFunction = () => [
 	{
-		title: 'Elf',
+		title: 'Elf - Create and share gift ideas with just a link',
 	},
 	{
 		name: 'viewport',
@@ -37,6 +37,26 @@ export const meta: MetaFunction = () => [
 	},
 	{
 		charset: 'utf-8',
+	},
+	{
+		name: 'description',
+		content: 'The easiest way to share gift ideas with your friends and family.',
+	},
+	{
+		name: 'og:image',
+		content: '/elf_og_image.png',
+	},
+	{
+		name: 'og:title',
+		content: 'Elf',
+	},
+	{
+		name: 'og:description',
+		content: 'The easiest way to share gift ideas with your friends and family.',
+	},
+	{
+		name: 'og:url',
+		content: 'https://elf.fly.dev',
 	},
 ]
 

@@ -20,6 +20,7 @@ This will start a local development server at `http://localhost:3000`
 -   `pnpm run lint`
 -   `pnpm run format`
 -   `pnpm validate` (runs everything all at once)
+-   `./scripts/nuke_db.sh` (nuke the local database and start over)
 
 ### Deployment
 

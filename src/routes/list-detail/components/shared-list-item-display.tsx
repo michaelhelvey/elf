@@ -85,6 +85,11 @@ export function SharedListItemDisplay({ item, list, currentUserId }: SharedListI
 								size='icon'
 								variant='outline'
 								disabled={fetcher.state === 'submitting'}
+								title={
+									purchaseState === PurchasedState.NotPurchased
+										? 'Mark as purchased'
+										: 'Unmark as purchased'
+								}
 							>
 								{fetcher.state === 'submitting' ? (
 									<Spinner className='w-4 h-4' />

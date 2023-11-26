@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Spinner } from '@/components/spinner'
 import { Button } from '@/components/ui/button'
 import {
@@ -22,6 +23,31 @@ type OwnedListItemsDisplayProps = {
 	list: ListById
 }
 
+async function getShareLink(listId: number) {
+	const response = await fetch(`/lists/${listId}/shares/create`, { method: 'POST' })
+
+	if (!response.ok) {
+		throw new Error(`Failed to create share link: ${response.statusText}`)
+	}
+
+	const { shareURL } = (await response.json()) as { shareURL: string }
+	return shareURL
+}
+
+async function copyTextToClipboard(listId: number) {
+	if (typeof ClipboardItem && navigator.clipboard.write) {
+		const text = new ClipboardItem({
+			'text/plain': getShareLink(listId).then(
+				text => new Blob([text], { type: 'text/plain' })
+			),
+		})
+		return navigator.clipboard.write([text])
+	} else {
+		const shareURL = await getShareLink(listId)
+		await navigator.clipboard.writeText(shareURL)
+	}
+}
+
 export function OwnedListItemsDisplay({ list, listItems }: OwnedListItemsDisplayProps) {
 	const [editDialogOpen, setEditDialogOpen] = useState(false)
 	const { toast } = useToast()
@@ -29,11 +55,8 @@ export function OwnedListItemsDisplay({ list, listItems }: OwnedListItemsDisplay
 
 	const generateShareLink = () => {
 		setShareTokenState('loading')
-		fetch(`/lists/${list.id}/shares/create`, { method: 'POST' })
-			.then(async response => {
-				const { shareURL } = (await response.json()) as { shareURL: string }
-				await navigator.clipboard.writeText(shareURL)
-
+		copyTextToClipboard(list.id)
+			.then(() => {
 				toast({
 					title: 'Copied to clipboard',
 					description:

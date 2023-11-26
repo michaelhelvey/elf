@@ -44,3 +44,14 @@ export async function dataFunctionAuthGuard(args: ActionFunctionArgs) {
 }
 
 export const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
+
+interface UserWithInitials {
+	first_name?: string | null
+	last_name?: string | null
+}
+
+export function initials({ first_name, last_name }: UserWithInitials) {
+	const first = first_name?.trim()?.[0] || ''
+	const last = last_name?.trim()?.[0] || ''
+	return first + last
+}

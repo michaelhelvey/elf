@@ -1,3 +1,4 @@
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { ClerkApp, ClerkErrorBoundary } from '@clerk/remix'
 import { rootAuthLoader } from '@clerk/remix/ssr.server'
 import { LinksFunction, LoaderFunction, MetaFunction } from '@remix-run/node'
@@ -126,9 +127,11 @@ export const ErrorBoundary = ClerkErrorBoundary(DefaultErrorBoundary)
 function App() {
 	const { theme } = useLoaderData<{ theme: string | undefined }>()
 	return (
-		<AppShell theme={theme}>
-			<Outlet></Outlet>
-		</AppShell>
+		<TooltipProvider>
+			<AppShell theme={theme}>
+				<Outlet></Outlet>
+			</AppShell>
+		</TooltipProvider>
 	)
 }
 

@@ -112,13 +112,7 @@ function ListItemEntry({ item, list }: ListItemEntryProps) {
 		>
 			<Dialog open={editDialogOpen} onOpenChange={setEditDialogOpen}>
 				<DialogTrigger className='col-span-7 flex items-center justify-start'>
-					{/* <Avatar className='rounded-sm mr-4 h-12 w-12'>
-						<AvatarImage src={item.og_image_url ?? undefined} alt={item.name} />
-						<AvatarFallback>
-							<MagicWandIcon className='w-5 h-5 text-muted-foreground' />
-						</AvatarFallback>
-					</Avatar> */}
-					<div className='flex flex-1 items-start space-y-1 flex-col col-span-4'>
+					<div className='flex flex-1 items-start space-y-1 flex-col col-span-4 text-left'>
 						<p className='text-base font-semibold leading-none mb-1'>{item.name}</p>
 						{item.link && (
 							<a
@@ -131,7 +125,7 @@ function ListItemEntry({ item, list }: ListItemEntryProps) {
 								{item.link.length > 45 ? item.link.slice(0, 45) + '...' : item.link}
 							</a>
 						)}
-						<p className='text-sm text-muted-foreground text-left'>
+						<p className='text-sm text-muted-foreground'>
 							{item.description?.length
 								? item.description
 								: 'No description provided'}

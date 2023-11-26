@@ -18,7 +18,11 @@ export async function deleteUser(id: string) {
 }
 
 export async function getListsForUser(userId: string) {
-	return await db.select().from(lists).where(eq(lists.owner_id, userId))
+	return await db
+		.select()
+		.from(lists)
+		.where(eq(lists.owner_id, userId))
+		.orderBy(desc(lists.updated_at))
 }
 
 export type OwnedList = Awaited<ReturnType<typeof getListsForUser>>[0]
@@ -29,10 +33,12 @@ export async function getListsSharedWithUser(userId: string) {
 			id: lists.id,
 			name: lists.name,
 			description: lists.description,
+			updated_at: lists.updated_at,
 			owner: {
 				id: users.id,
 				first_name: users.first_name,
 				last_name: users.last_name,
+				name: sql<string>`concat(${users.first_name}, ' ', ${users.last_name})`,
 				email: users.email,
 				avatar_url: users.avatar_url,
 			},
@@ -41,7 +47,7 @@ export async function getListsSharedWithUser(userId: string) {
 		.innerJoin(shares, eq(lists.id, shares.list_id))
 		.innerJoin(users, eq(lists.owner_id, users.id))
 		.where(eq(shares.shared_with_id, userId))
-		.orderBy(desc(lists.created_at))
+		.orderBy(desc(lists.updated_at))
 }
 
 export type SharedList = Awaited<ReturnType<typeof getListsSharedWithUser>>[0]
@@ -62,6 +68,7 @@ export async function getListById(id: number) {
 				id: users.id,
 				first_name: users.first_name,
 				last_name: users.last_name,
+				name: sql<string>`concat(${users.first_name}, ' ', ${users.last_name})`,
 				email: users.email,
 				avatar_url: users.avatar_url,
 			},
@@ -103,14 +110,23 @@ export async function getItemsForList(listId: number) {
 			link: listItems.link,
 			og_image_url: listItems.og_image_url,
 			description: listItems.description,
+			purchased_by: {
+				id: users.id,
+				first_name: users.first_name,
+				last_name: users.last_name,
+				name: sql<string>`concat(${users.first_name}, ' ', ${users.last_name})`,
+				email: users.email,
+				avatar_url: users.avatar_url,
+			},
 		})
 		.from(lists)
 		.innerJoin(listItems, eq(lists.id, listItems.list_id))
+		.leftJoin(users, eq(users.id, listItems.purchased_by))
 		.where(eq(lists.id, listId))
 		.orderBy(desc(listItems.created_at))
 }
 
-export async function getlistItemById(id: number) {
+export async function getListItemById(id: number) {
 	const rows = await db.select().from(listItems).where(eq(listItems.id, id)).limit(1)
 	return rows[0]
 }
@@ -130,6 +146,9 @@ export async function createListItem(listId: number, input: typeof listItems.$in
 		.insert(listItems)
 		.values({ ...input, list_id: listId })
 		.returning({ newItemId: listItems.id })
+
+	// bump the list to the top of people's share lists
+	await db.update(lists).set({ updated_at: new Date() }).where(eq(lists.id, listId))
 	return rows[0]
 }
 
@@ -202,4 +221,23 @@ export async function isListSharedWithUser(listId: number, userId: string) {
 		.limit(1)
 
 	return !!rows.length
+}
+
+export async function setPurchasedByForListItem(itemId: number, userId: string | null) {
+	return await db.update(listItems).set({ purchased_by: userId }).where(eq(listItems.id, itemId))
+}
+
+export async function getUsersListIsSharedWith(listId: number) {
+	return await db
+		.select({
+			id: users.id,
+			first_name: users.first_name,
+			last_name: users.last_name,
+			name: sql<string>`concat(${users.first_name}, ' ', ${users.last_name})`,
+			email: users.email,
+			avatar_url: users.avatar_url,
+		})
+		.from(shares)
+		.innerJoin(users, eq(shares.shared_with_id, users.id))
+		.where(eq(shares.list_id, listId))
 }

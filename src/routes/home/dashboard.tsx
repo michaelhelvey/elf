@@ -12,9 +12,10 @@ import {
 import { Separator } from '@/components/ui/separator'
 import { OwnedList, SharedList } from '@/lib/crud.server'
 import { SignedIn } from '@clerk/remix'
-import { RowsIcon, Share1Icon } from '@radix-ui/react-icons'
+import { DotFilledIcon, PersonIcon, RowsIcon, Share1Icon } from '@radix-ui/react-icons'
 import { SerializeFrom } from '@remix-run/node'
 import { Link } from '@remix-run/react'
+import formatDistanceToNow from 'date-fns/formatDistanceToNow/index.js'
 import { ListForm } from './components/list-form'
 import { OwnedListDisplay } from './components/owned-list-display'
 
@@ -40,7 +41,7 @@ interface MyListsProps {
 
 export function MyLists({ lists }: MyListsProps) {
 	return (
-		<Card className='w-full max-w-md'>
+		<Card className='w-full max-w-lg'>
 			<CardHeader>
 				<CardTitle>Your Lists</CardTitle>
 				<CardDescription>lists you've created</CardDescription>
@@ -80,18 +81,12 @@ export function MyLists({ lists }: MyListsProps) {
 }
 
 interface SharedListsProps {
-	lists: SharedList[]
-}
-
-const ownerInitials = (owner: SharedList['owner']) => {
-	const firstInitial = owner.first_name?.[0] ?? ''
-	const lastInitial = owner.last_name?.[0] ?? ''
-	return firstInitial + lastInitial
+	lists: SerializeFrom<SharedList>[]
 }
 
 export function SharedLists({ lists }: SharedListsProps) {
 	return (
-		<Card className='w-full max-w-md'>
+		<Card className='w-full max-w-lg'>
 			<CardHeader>
 				<CardTitle>Shared With You</CardTitle>
 				<CardDescription>links to lists that others sent to you</CardDescription>
@@ -106,20 +101,36 @@ export function SharedLists({ lists }: SharedListsProps) {
 						</p>
 					</div>
 				)}
-				{lists.map(({ name, description, id, owner }) => (
+				{lists.map(({ name, description, id, owner, updated_at }) => (
 					<Link
-						className='flex items-center space-x-4 rounded-md p-2 transition-all hover:bg-accent hover:text-accent-foreground my-1'
+						className='rounded-md transition-all hover:bg-accent hover:text-accent-foreground mb-4 last:mb-0 p-2 block'
 						key={id}
 						to={`/lists/${id}`}
 					>
-						<Avatar>
-							<AvatarImage src={owner.avatar_url ?? undefined}></AvatarImage>
-							<AvatarFallback>{ownerInitials(owner)}</AvatarFallback>
-						</Avatar>
-						<div className='space-y-1'>
-							<p className='text-sm font-medium leading-none'>{name}</p>
-							<p className='text-sm text-muted-foreground'>{description}</p>
+						<div className='flex items-center gap-2'>
+							<Avatar className='w-8 h-8'>
+								<AvatarImage src={owner.avatar_url ?? undefined} alt={owner.name} />
+								<AvatarFallback>
+									<PersonIcon className='w-full h-full p-1 bg-stone-500 text-white' />
+								</AvatarFallback>
+							</Avatar>
+							<div>
+								<p className='text-foreground font-semibold'>{name}</p>
+								<div className='flex items-center flex-wrap'>
+									<span className='text-xs text-muted-foreground'>
+										shared by{' '}
+										<span className='text-foreground font-semibold'>
+											{owner.name}
+										</span>
+									</span>
+									<DotFilledIcon className='text-muted-foreground w-2 h-2 mx-1'></DotFilledIcon>
+									<span className='text-xs text-muted-foreground'>
+										updated {formatDistanceToNow(new Date(updated_at))} ago
+									</span>
+								</div>
+							</div>
 						</div>
+						<p className='mt-2 text-sm'>{description}</p>
 					</Link>
 				))}
 			</CardContent>

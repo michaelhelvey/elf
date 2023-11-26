@@ -1,3 +1,4 @@
+import { Avatar, AvatarImage } from '@/components/ui/avatar'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import {
 	Dialog,
@@ -17,12 +18,14 @@ import {
 	deleteList,
 	getItemsForList,
 	getListById,
+	getUsersListIsSharedWith,
 	isListSharedWithUser,
 	updateList,
 } from '@/lib/crud.server'
 import { logger } from '@/lib/logger.server'
 import { dataFunctionAuthGuard } from '@/lib/utils'
-import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { AvatarFallback } from '@radix-ui/react-avatar'
+import { DotsHorizontalIcon, PersonIcon, RowsIcon } from '@radix-ui/react-icons'
 import { ActionFunctionArgs, LoaderFunctionArgs, redirect } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 import { ok as invariant } from 'assert'
@@ -30,6 +33,7 @@ import { useState } from 'react'
 import { validationError } from 'remix-validated-form'
 import { ListForm, listFieldsValidator } from '../home/components/list-form'
 import { OwnedListItemsDisplay } from './components/owned-list-items-display'
+import { SharedListItemDisplay } from './components/shared-list-item-display'
 
 export const loader = async (args: LoaderFunctionArgs) => {
 	const userId = await dataFunctionAuthGuard(args)
@@ -38,7 +42,13 @@ export const loader = async (args: LoaderFunctionArgs) => {
 	invariant(listId, 'expected list id route param')
 
 	const list = await getListById(parseInt(listId))
-	const listItems = await getItemsForList(parseInt(listId))
+
+	if (!list) {
+		throw new Response('Not Found', { status: 404 })
+	}
+
+	const listItems = await getItemsForList(list.id)
+	const sharedWithUsers = await getUsersListIsSharedWith(list.id)
 
 	if (userId !== list.owner.id && !(await isListSharedWithUser(list.id, userId))) {
 		throw new Response('Forbidden', { status: 403 })
@@ -47,6 +57,7 @@ export const loader = async (args: LoaderFunctionArgs) => {
 	return {
 		list,
 		listItems,
+		sharedWithUsers,
 		userId,
 	}
 }
@@ -103,18 +114,52 @@ export default function ListDetailPage() {
 }
 
 function ListDetailShareView() {
-	const { list } = useLoaderData<typeof loader>()
+	const { list, listItems, userId } = useLoaderData<typeof loader>()
 	return (
 		<div className='flex flex-col items-center justify-center flex-1 p-2'>
 			<Card className='w-full max-w-lg'>
 				<div className='flex items-center justify-between w-full'>
 					<CardHeader>
+						<div className='text-xs bg-secondary text-secondary-foreground py-2 px-3 rounded-md flex items-center mb-2'>
+							<Avatar className='w-5 h-5 mr-1'>
+								<AvatarImage
+									src={list.owner.avatar_url ?? undefined}
+									alt={list.owner.name}
+								/>
+								<AvatarFallback>
+									<PersonIcon className='w-full h-full p-1 bg-stone-500 text-white' />
+								</AvatarFallback>
+							</Avatar>
+							<p>
+								Shared with you by
+								<span className='font-semibold text-accent-foreground'>
+									{' ' + list.owner.name}
+								</span>
+							</p>
+						</div>
 						<CardTitle>{list.name}</CardTitle>
 						<CardDescription>{list.description}</CardDescription>
 					</CardHeader>
 				</div>
 				<CardContent>
 					<Separator className='mb-5'></Separator>
+					{listItems.map(item => (
+						<SharedListItemDisplay
+							item={item}
+							key={item.id}
+							list={list}
+							currentUserId={userId}
+						/>
+					))}
+					{listItems.length === 0 && (
+						<div className='flex items-center justify-center flex-col p-8'>
+							<RowsIcon className='text-muted-foreground w-5 h-5'></RowsIcon>
+							<p className='text-sm text-muted-foreground mt-6 text-center'>
+								For some reason, {list.owner.name} shared this list without putting
+								any items in it first.
+							</p>
+						</div>
+					)}
 				</CardContent>
 			</Card>
 		</div>
@@ -122,7 +167,7 @@ function ListDetailShareView() {
 }
 
 function ListDetailOwnerView() {
-	const { list, listItems } = useLoaderData<typeof loader>()
+	const { list, listItems, sharedWithUsers } = useLoaderData<typeof loader>()
 	const [editDialogOpen, setEditDialogOpen] = useState(false)
 
 	return (
@@ -147,6 +192,33 @@ function ListDetailOwnerView() {
 					</div>
 				</div>
 				<CardContent>
+					{sharedWithUsers.length > 0 && (
+						<div className='text-xs mb-4 -mt-2 flex items-center justify-start gap-2 flex-wrap text-muted-foreground'>
+							Shared with:{' '}
+							{sharedWithUsers.map(user => (
+								<div
+									className='bg-secondary text-secondary-foreground px-2 py-1 rounded-full flex items-center'
+									key={user.id}
+								>
+									<Avatar className='w-4 h-4 mr-1'>
+										<AvatarImage
+											src={user.avatar_url ?? undefined}
+											alt={user.name}
+										/>
+										<AvatarFallback>
+											<PersonIcon className='w-full h-full p-1 bg-stone-500 text-white' />
+										</AvatarFallback>
+									</Avatar>
+									<span className='whitespace-nowrap'>{user.name}</span>
+								</div>
+							))}
+						</div>
+					)}
+					{sharedWithUsers.length === 0 && (
+						<div className='text-xs mb-4 -mt-2 flex items-center justify-start gap-2 flex-wrap text-muted-foreground'>
+							No one has clicked on a share link for this list yet.
+						</div>
+					)}
 					<Separator className='mb-5'></Separator>
 					<OwnedListItemsDisplay listItems={listItems} list={list} />
 				</CardContent>

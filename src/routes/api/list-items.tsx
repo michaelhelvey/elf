@@ -1,4 +1,4 @@
-import { deletelistItem, getListById, getlistItemById, updateListItem } from '@/lib/crud.server'
+import { deletelistItem, getListById, getListItemById, updateListItem } from '@/lib/crud.server'
 import { extractOgImageFromUrl } from '@/lib/image-extractor.server'
 import { listItems } from '@/lib/schema.server'
 import { dataFunctionAuthGuard } from '@/lib/utils'
@@ -7,7 +7,7 @@ import { ActionFunctionArgs } from '@remix-run/node'
 import { validationError } from 'remix-validated-form'
 
 async function handleDeleteListItem(itemId: number) {
-	const listItem = await getlistItemById(itemId)
+	const listItem = await getListItemById(itemId)
 
 	if (!listItem) {
 		throw new Response('Not Found', { status: 404 })
@@ -24,7 +24,7 @@ export const action = async (args: ActionFunctionArgs) => {
 
 	const { listId, listItemId } = args.params as { listId: string; listItemId: string }
 	const list = await getListById(parseInt(listId))
-	const listItem = await getlistItemById(parseInt(listItemId))
+	const listItem = await getListItemById(parseInt(listItemId))
 
 	// FIXME: need to check that the list item is in the list
 	if (!list || !listItem) {

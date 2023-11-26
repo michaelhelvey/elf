@@ -16,7 +16,7 @@ export const action = async (args: ActionFunctionArgs) => {
 	}
 
 	const { newToken } = await createShareToken(listId)
-	const shareURL = new URL(`/shares/activate/${newToken}`, args.request.url)
+	const shareURL = new URL(`/lists/${listId}/shares/activate?token=${newToken}`, args.request.url)
 
 	return { shareURL }
 }

@@ -13,7 +13,6 @@ import {
 	DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Separator } from '@/components/ui/separator'
-import { useToast } from '@/components/ui/use-toast'
 import {
 	deleteList,
 	getItemsForList,
@@ -125,30 +124,6 @@ function ListDetailShareView() {
 function ListDetailOwnerView() {
 	const { list, listItems } = useLoaderData<typeof loader>()
 	const [editDialogOpen, setEditDialogOpen] = useState(false)
-	const { toast } = useToast()
-
-	const generateShareLink = async () => {
-		try {
-			const response = await fetch(`/shares/${list.id}/new`, { method: 'POST' })
-			if (!response.ok) {
-				throw new Error(response.statusText)
-			}
-
-			const { shareURL } = (await response.json()) as { shareURL: string }
-			await navigator.clipboard.writeText(shareURL)
-
-			toast({
-				title: 'Copied to clipboard',
-				description:
-					'Paste it somewhere and let others know about it! The link is valid for 24 hours.',
-			})
-		} catch (e) {
-			const message = 'Failed to copy share link'
-			const description = e instanceof Error ? e.message : String(e)
-
-			toast({ title: message, description })
-		}
-	}
 
 	return (
 		<div className='flex flex-col items-center justify-center flex-1 p-2'>
@@ -166,9 +141,6 @@ function ListDetailOwnerView() {
 							<DropdownMenuContent align='end'>
 								<DropdownMenuItem onSelect={() => setEditDialogOpen(true)}>
 									Edit List
-								</DropdownMenuItem>
-								<DropdownMenuItem onSelect={() => void generateShareLink()}>
-									Copy Share Link
 								</DropdownMenuItem>
 							</DropdownMenuContent>
 						</DropdownMenu>

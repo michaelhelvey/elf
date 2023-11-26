@@ -14,14 +14,16 @@ import { OwnedList, SharedList } from '@/lib/crud.server'
 import { SignedIn } from '@clerk/remix'
 import { RowsIcon, Share1Icon } from '@radix-ui/react-icons'
 import { SerializeFrom } from '@remix-run/node'
-import { Link, useLoaderData } from '@remix-run/react'
+import { Link } from '@remix-run/react'
 import { ListForm } from './components/list-form'
 import { OwnedListDisplay } from './components/owned-list-display'
-import { loader } from './home'
 
-export function DashboardPage() {
-	const { myLists, sharedLists } = useLoaderData<typeof loader>()
+interface DashboardPageProps {
+	myLists: SerializeFrom<OwnedList>[]
+	sharedLists: SerializeFrom<SharedList>[]
+}
 
+export function DashboardPage({ myLists, sharedLists }: DashboardPageProps) {
 	return (
 		<SignedIn>
 			<section className='flex-1 flex flex-col items-center justify-center p-2 gap-4'>

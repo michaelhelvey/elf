@@ -135,6 +135,7 @@ function App() {
 export default ClerkApp(App, {
 	signInUrl: '/login',
 	signUpUrl: '/signup',
+	// Note: the real implementation of these are in the loaders in the login.$ and signup.$ files, respectively.
 	afterSignInUrl: '/',
 	afterSignUpUrl: '/',
 	appearance: {

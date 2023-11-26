@@ -9,8 +9,9 @@ import {
 	DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '@/components/ui/separator'
+import { useToast } from '@/components/ui/use-toast'
 import { ListById, ListItem } from '@/lib/crud.server'
-import { PlusIcon, RowsIcon, TrashIcon } from '@radix-ui/react-icons'
+import { PlusIcon, RowsIcon, Share2Icon, TrashIcon } from '@radix-ui/react-icons'
 import { useFetcher } from '@remix-run/react'
 import clsx from 'clsx'
 import { useState } from 'react'
@@ -23,6 +24,30 @@ type OwnedListItemsDisplayProps = {
 
 export function OwnedListItemsDisplay({ list, listItems }: OwnedListItemsDisplayProps) {
 	const [editDialogOpen, setEditDialogOpen] = useState(false)
+	const { toast } = useToast()
+	const [shareTokenState, setShareTokenState] = useState('idle')
+
+	const generateShareLink = () => {
+		setShareTokenState('loading')
+		fetch(`/lists/${list.id}/shares/create`, { method: 'POST' })
+			.then(async response => {
+				const { shareURL } = (await response.json()) as { shareURL: string }
+				await navigator.clipboard.writeText(shareURL)
+
+				toast({
+					title: 'Copied to clipboard',
+					description:
+						'Paste it somewhere and let others know about it! The link is valid for 24 hours.',
+				})
+				setShareTokenState('idle')
+			})
+			.catch(e => {
+				const message = 'Failed to copy share link'
+				const description = e instanceof Error ? e.message : String(e)
+				toast({ title: message, description })
+				setShareTokenState('idle')
+			})
+	}
 
 	return (
 		<>
@@ -55,6 +80,16 @@ export function OwnedListItemsDisplay({ list, listItems }: OwnedListItemsDisplay
 					<ListItemForm list={list} onSuccess={() => setEditDialogOpen(false)} />
 				</DialogContent>
 			</Dialog>
+
+			<Button
+				variant='outline'
+				className='mt-3 w-full'
+				disabled={shareTokenState === 'loading'}
+				onClick={generateShareLink}
+			>
+				<Share2Icon className='w-4 h-4 mr-2' />
+				{shareTokenState === 'idle' ? 'Share Link' : <Spinner className='w-4 h-4' />}
+			</Button>
 		</>
 	)
 }

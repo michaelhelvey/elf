@@ -4,7 +4,7 @@
 
 # elf
 
-Christmas lists, or something.
+Share gift idea lists with friends and family with links.
 
 ## Getting Started
 
@@ -33,4 +33,4 @@ This will start a local development server at `http://localhost:3000`
 
 ## License
 
-MIT
+AGPL
